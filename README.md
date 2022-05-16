@@ -277,4 +277,76 @@ helloc1.txt
 <img src="appc.png">
 
 
+## Docker tips 
+### remove all running containers
+```
+docker  rm   $(docker  ps  -q)  -f
+```
+
+### stop all running containers 
+
+```
+docker  stop   $(docker  ps  -q) 
+```
+### building first docker image using dockerfile 
+```
+ cd python_app_image/
+[ashu@ip-172-31-31-222 python_app_image]$ ls
+Dockerfile  mob.py
+[ashu@ip-172-31-31-222 python_app_image]$ docker  build  -t  ashypyapp:1.0  . 
+Sending build context to Docker daemon  3.072kB
+Step 1/6 : FROM python
+ ---> bda19bf988a7
+Step 2/6 : LABEL email=ashutoshh@linux.com
+ ---> Running in c5164561fd04
+Removing intermediate container c5164561fd04
+ ---> 5319235fc03f
+Step 3/6 : LABEL name=ashutoshh
+ ---> Running in d15c19a1cffd
+Removing intermediate container d15c19a1cffd
+ ---> d87db0e2f8d3
+Step 4/6 : RUN  mkdir /mob_project
+ ---> Running in beaca19fbf07
+Removing intermediate container beaca19fbf07
+ ---> 208159913d74
+Step 5/6 : COPY mob.py  /mob_project/mob.py
+ ---> e3d007df7eac
+Step 6/6 : CMD  ["python","/mob_project/mob.py"]
+ ---> Running in 5de9adc5d4de
+Removing intermediate container 5de9adc5d4de
+ ---> 0512a4e7a43a
+Successfully built 0512a4e7a43a
+Successfully tagged ashypyapp:1.0
+```
+
+### creating container 
+
+```
+ 87  docker  build  -t  ashypyapp:1.0  . 
+   88  history 
+[ashu@ip-172-31-31-222 python_app_image]$ docker run -it  -d  --name ashupc1  ashypyapp:1.0
+b161034aec4c980c215a461a9731bacb2f2310adc7cd5e7985f0fb19eea1c692
+[ashu@ip-172-31-31-222 python_app_image]$ docker ps
+CONTAINER ID   IMAGE           COMMAND                  CREATED          STATUS          PORTS     NAMES
+b161034aec4c   ashypyapp:1.0   "python /mob_project…"   14 seconds ago   Up 13 seconds             ashupc1
+```
+
+### overall -- any app contianerization is listed below 
+
+<img src="build.png">
+
+### building image 
+
+```
+[ashu@ip-172-31-31-222 python_app_image]$ docker  build  -t  ashypyapp:1.1 -f  centos.dockerfile  .
+Sending build context to Docker daemon  4.608kB
+Step 1/7 : FROM fedora
+latest: Pulling from library/fedora
+e1deda52ffad: Pull complete 
+Digest: sha256:cbf627299e327f564233aac6b97030f9023ca41d3453c497be2f5e8f7762d185
+Status: Downloaded newer image for fedora:latest
+ ---> 98ffdbffd207
+Step 2/7 : LABEL email=ashutoshh@linux.com
+
+```
 
