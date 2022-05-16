@@ -272,5 +272,9 @@ ashutoshh
 helloc1.txt
 [ashu@ip-172-31-31-222 ~]$ docker  cp helloc1.txt  ashuc2:/
 ```
+### application containerization -- source code -- docker image - docker containers 
+
+<img src="appc.png">
+
 
 
