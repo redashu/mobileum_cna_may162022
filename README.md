@@ -244,4 +244,33 @@ BUG_REPORT_URL="https://bugs.alpinelinux.org/"
 / # exit
 
 ```
+### solution 1 
+
+```
+[ashu@ip-172-31-31-222 ~]$ docker  run -d  --name ashuc1  alpine  ping localhost 
+2ad27f97cf2ce1e34549b944e932eac95378cffccd402109f2fd12eb0a857e7c
+[ashu@ip-172-31-31-222 ~]$ 
+[ashu@ip-172-31-31-222 ~]$ 
+[ashu@ip-172-31-31-222 ~]$ docker  run -d  --name ashuc2  alpine  ping localhost 
+84519679d668ef6c3fd95ca8cdd961d8bc472f4a89d7e708e3c2e4c2d598dbd7
+[ashu@ip-172-31-31-222 ~]$ docker exec -it ashuc1  sh 
+/ # 
+/ # 
+/ # pwd
+/
+/ # ls
+bin    dev    etc    home   lib    media  mnt    opt    proc   root   run    sbin   srv    sys    tmp    usr    var
+/ # echo  ashutoshh   >helloc1.txt 
+/ # ls
+bin          etc          home         media        opt          root         sbin         sys          usr
+dev          helloc1.txt  lib          mnt          proc         run          srv          tmp          var
+/ # cat  helloc1.txt 
+ashutoshh
+/ # exit
+[ashu@ip-172-31-31-222 ~]$ docker  cp  ashuc1:/helloc1.txt  . 
+[ashu@ip-172-31-31-222 ~]$ ls
+helloc1.txt
+[ashu@ip-172-31-31-222 ~]$ docker  cp helloc1.txt  ashuc2:/
+```
+
 
