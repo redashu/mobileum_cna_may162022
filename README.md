@@ -350,3 +350,72 @@ Step 2/7 : LABEL email=ashutoshh@linux.com
 
 ```
 
+### TASK 2 :
+
+```
+FROM alpine
+MAINTAINER name=ashutoshh
+RUN apk add python3 
+# apk is installer for alpine image 
+RUN mkdir /code 
+ADD https://raw.githubusercontent.com/redashu/pythonLang/main/while.py /code/ 
+# in copy u can't use URL while add can take local and URL sources
+ENTRYPOINT  python3  /code/while.py 
+
+```
+
+## Intro to Container Registry 
+
+<img src="registry.png">
+
+### Understanding docker HUb 
+
+<img src="dh.png">
+
+## pushing image to docker hub 
+
+### tag as per standard 
+
+```
+ docker  tag  ashupyapp:1.0   docker.io/dockerashu/ashuapp:v1 
+[ashu@ip-172-31-31-222 python_app_image]$ docker  images
+REPOSITORY           TAG       IMAGE ID       CREATED              SIZE
+rosas_alppycodev1    1.0       d007102c1d95   35 seconds ago       54MB
+dockerashu/ashuapp   v1        e62f72f2a8ea   About a minute ago   54MB
+ashupyapp            1.0       e62f72f2a8ea   About a minute ago   54MB
+```
+### login to docker hub account from docker client 
+
+```
+docker  login 
+Login with your Docker ID to push and pull images from Docker Hub. If you don't have a Docker ID, head over to https://hub.docker.com to create one.
+Username: dockerashu
+Password: 
+WARNING! Your password will be stored unencrypted in /home/ashu/.docker/config.json.
+Configure a credential helper to remove this warning. See
+https://docs.docker.com/engine/reference/commandline/login/#credentials-store
+
+Login Succeeded
+
+```
+
+### pushing image to docker hub 
+
+```
+docker push  docker.io/dockerashu/ashuapp:v1
+The push refers to repository [docker.io/dockerashu/ashuapp]
+1b5dd0bc66eb: Pushed 
+fff64d86465b: Pushed 
+6672208a6be9: Pushed 
+4fc242d58285: Mounted from pradeepsubudhi/pradeepapp 
+v1: digest: sha256:c44bf086ff24dd05e2144ea5ccda07541b99565b145603cca9ea6b5cc1c92c93 size: 1154
+[ashu@ip-172-31-31-222 python_app_image]$ 
+
+```
+
+### docker account logout 
+
+```
+docker logout 
+Removing login credentials for https://index.docker.io/v1/
+```
