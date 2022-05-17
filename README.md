@@ -346,3 +346,88 @@ dc9fa3d8b576: Pushing [=============>                                     ]  86.
 
 docker logout  ashutoshh.azurecr.io
 ```
+### from container to image 
+
+```
+]$ docker  run -it --name  ashucimg  oraclelinux:8.4     bash ^C
+[ashu@ip-172-31-31-222 java-code]$ docker  commit  ashucimg  ashucimg:v007  
+sha256:3917e1e6a4692fcded101235e5c2513be5b543ca10199ee09faf91bfda60d656
+
+```
+
+### webapp containerization 
+
+<img src="webapp.png">
+
+## sample webapp containerization using nginx web server
+
+### cloning source code 
+
+```
+git clone  https://github.com/yenchiah/project-website-template.git
+Cloning into 'project-website-template'...
+remote: Enumerating objects: 940, done.
+remote: Total 940 (delta 0), reused 0 (delta 0), pack-reused 940
+Receiving objects: 100% (940/940), 1.07 MiB | 33.15 MiB/s, done.
+Resolving deltas: 100% (586/586), done.
+[ashu@ip-172-31-31-222 images]$ ls
+java-code  project-website-template  python_app_image
+[ashu@ip-172-31-31-222 images]$ cd  project-website-template/
+[ashu@ip-172-31-31-222 project-website-template]$ ls
+LICENSE  README.md  css  embedding.html  empty.html  img  index.html  js  menu.html  vid  widgets.html
+[ashu@ip-172-31-31-222 project-website-template]$ ls -a
+.  ..  .git  .gitignore  LICENSE  README.md  css  embedding.html  empty.html  img  index.html  js  menu.html  vid  widgets.html
+[ashu@ip-172-31-31-222 project-website-template]$ 
+
+
+```
+
+### building image 
+
+```
+cat  Dockerfile 
+FROM nginx
+ADD . /usr/share/nginx/html/
+# if we are not using cmd/ entrypoint then base image / from image cmd / entrypoint will be used 
+[ashu@ip-172-31-31-222 project-website-template]$ cat .dockerignore 
+.git
+.gitignore
+.dockerignore
+Dockerfile
+*.md
+LICENSE
+[ashu@ip-172-31-31-222 project-website-template]$ docker  build  -t  ashuweb:appv1  . 
+Sending build context to Docker daemon  1.004MB
+Step 1/2 : FROM nginx
+latest: Pulling from library/nginx
+214ca5fb9032: Pull complete 
+f0156b83954c: Pull complete 
+5c4340f87b72: Pull complete 
+9de84a6a72f5: Pull complete 
+63f91b232fe3: Pull complete 
+860d24db679a: Pull complete 
+Digest: sha256:2c72b42c3679c1c819d46296c4e79e69b2616fa28bea92e61d358980e18c9751
+Status: Downloaded newer image for nginx:latest
+ ---> 7425d3a7c478
+Step 2/2 : ADD . /usr/share/nginx/html/
+ ---> 0282d3ca7cc5
+Successfully built 0282d3ca7cc5
+Successfully tagged ashuweb:appv1
+
+```
+
+### building docker image from remote source code 
+
+```
+docker  build  -t  ashujavaweb:v1  https://github.com/redashu/javawebapp.git
+
+```
+
+### documentation for docker github build 
+
+[docs](https://docs.docker.com/engine/reference/commandline/build/)
+
+### Multistage dockerfile 
+
+<img src="stage.png">
+
