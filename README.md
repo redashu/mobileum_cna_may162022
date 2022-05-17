@@ -555,5 +555,20 @@ da6c4f738130   alpine    "ping localhost"   39 seconds ago   Up 5 seconds       
 
 ```
 
+### COntrol groups in Docker container 
+
+<img src="cp.png">
+
+### limit Memory from Host to container 
+```
+ docker  run -itd  --name ashuc2  --restart always --memory 100M  alpine ping localhost
+```
+
+### memory and cpu 
+
+```
+ docker  run -itd  --name ashuc3  --restart always --memory 100M --cpu-shares=20  alpine ping localhost
+```
+
 
 
