@@ -242,4 +242,85 @@ CONTAINER ID   IMAGE             COMMAND                  CREATED          STATU
 4a978dd3f994   ashujava:codev2   "/bin/sh -c 'java my…"   24 seconds ago   Up 22 seconds             test3
 ```
 
+### Entrypoint and CMD together 
+
+```
+ ls  -a
+.  ..  .dockerignore  Dockerfile  hello.java  test.java
+[ashu@ip-172-31-31-222 java-code]$ cat  .dockerignore 
+Dockerfile
+.dockerignore
+[ashu@ip-172-31-31-222 java-code]$ cat  Dockerfile 
+FROM openjdk 
+# java supported image from ORacle 
+LABEL name=ashutoshh
+LABEL email=ashutoshh@linux.com
+RUN mkdir /javacode 
+COPY .  /javacode/
+# current location of dockerfile everything will be copied to /javacode 
+WORKDIR  /javacode 
+# changing working directory to above like cd commnad in nix 
+RUN javac * 
+# compiling code of java 
+ENTRYPOINT ["java"]
+CMD ["hello"]
+# process java hello / during container creation time myclass 
+[ashu@ip-172-31-31-222 java-code]$ docker build -t  ashujava:codev2 . 
+Sending build context to Docker daemon   5.12kB
+Step 1/9 : FROM openjdk
+ ---> 5e28ba2b4cdb
+Step 2/9 : LABEL name=ashutoshh
+ ---> Using cache
+ ---> 839a3c5b537f
+Step 3/9 : LABEL email=ashutoshh@linux.com
+ ---> Using cache
+ ---> 02e4c739f0c6
+Step 4/9 : RUN mkdir /javacode
+
+```
+
+### testing 
+
+```
+docker run -itd  --name ashujc1  ashujava:codev2 
+8bdd1dca33a177bb1b826c49dbb13db52ee1a8d9beea59385275d043a0987127
+[ashu@ip-172-31-31-222 java-code]$ docker  ps
+CONTAINER ID   IMAGE                COMMAND        CREATED              STATUS              PORTS     NAMES
+8bdd1dca33a1   ashujava:codev2      "java hello"   5 seconds ago        Up 1 second                   ashujc1
+8194faff7c9f   davidjava:2.0        "java hello"   38 seconds ago       Up 36 seconds                 davidjavac2
+4e80814d67bd   lepipasjava:codev2   "java hello"   About a minute ago   Up About a minute             lepipasc2
+[ashu@ip-172-31-31-222 java-code]$ docker run -itd  --name ashujc2  ashujava:codev2  myclass
+f143ae587c186fe08e3dfbd6d47537cb7bee26ebd0f4251a3823a7202a5ac13f
+[ashu@ip-172-31-31-222 java-code]$ docker  ps
+CONTAINER ID   IMAGE                COMMAND          CREATED              STATUS              PORTS     NAMES
+f143ae587c18   ashujava:codev2      "java myclass"   5 seconds ago        Up 1 second                   ashujc2
+819c60913cc2   deepajava:codev2     "java hello"     11 seconds ago       Up 8 seconds                  deepaTest2
+3e5b406e5f36   motajava:codev2      "java hello"     11 seconds ago       Up 9 seconds                  motac1
+f3ff6bbf09f2   pradeepjava:2.0      "java hello"     13 seconds ago       Up 11 seconds                 pradeepc1
+fcbd25ba6230   alexjava:codev2      "java hello"     15 seconds ago       Up 13 seconds                 alexjc1
+8bdd1dca33a1   ashujava:codev2      "java hello"     26 seconds ago       Up 23 seconds                 ashujc1
+
+```
+
+### final dockerfile 
+
+```
+FROM openjdk 
+# java supported image from ORacle 
+LABEL name=ashutoshh
+LABEL email=ashutoshh@linux.com
+RUN mkdir /javacode 
+COPY .  /javacode/
+# current location of dockerfile everything will be copied to /javacode 
+WORKDIR  /javacode 
+# changing working directory to above like cd commnad in nix 
+RUN javac *  &&  useradd jack 
+USER jack 
+# now container will be created using jack user privilige
+# compiling code of java 
+ENTRYPOINT ["java"]
+CMD ["hello"]
+# process java hello / during container creation time myclass 
+```
+
 
