@@ -323,4 +323,26 @@ CMD ["hello"]
 # process java hello / during container creation time myclass 
 ```
 
+### pushing image to ACR 
 
+```
+ docker  tag  ashujava:codev3    ashutoshh.azurecr.io/ashujava:codev3
+[ashu@ip-172-31-31-222 java-code]$ 
+[ashu@ip-172-31-31-222 java-code]$ docker login  ashutoshh.azurecr.io
+Username: ashutoshh
+Password: 
+WARNING! Your password will be stored unencrypted in /home/ashu/.docker/config.json.
+Configure a credential helper to remove this warning. See
+https://docs.docker.com/engine/reference/commandline/login/#credentials-store
+
+Login Succeeded
+[ashu@ip-172-31-31-222 java-code]$ docker push  ashutoshh.azurecr.io/ashujava:codev3
+The push refers to repository [ashutoshh.azurecr.io/ashujava]
+4877ed25e942: Pushed 
+84aec137aa8c: Pushed 
+9ce9c3e01ad9: Pushed 
+dc9fa3d8b576: Pushing [=============>                                     ]  86.99MB/321.3MB
+27ee19dc88f2: Pushed 
+
+docker logout  ashutoshh.azurecr.io
+```
