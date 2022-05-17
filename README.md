@@ -431,3 +431,70 @@ docker  build  -t  ashujavaweb:v1  https://github.com/redashu/javawebapp.git
 
 <img src="stage.png">
 
+### Dockerfile 
+
+```
+ cat Dockerfile 
+FROM  oraclelinux:8.4  as Stage1 
+LABEL email=ashutoshh@linux.com
+RUN yum install -y java-1.8.0-openjdk.x86_64 java-1.8.0-openjdk-devel.x86_64  maven && mkdir  /webapp
+COPY .  /webapp/
+WORKDIR  /webapp
+RUN mvn clean package  
+# above will build java web using maven and create target/WebApp.war  
+
+FROM  tomcat 
+COPY  --from=Stage1  /webapp/target/WebApp.war  /usr/local/tomcat/webapps/
+# from first build stage i am taking a specific date 
+EXPOSE 8080
+# optional but just to tell docker engine that default port is 8080 for tomcat internal to docker only
+
+
+```
+
+### .dockerignore 
+
+```
+cat .dockerignore 
+Dockerfile
+.dockerignore
+.git
+*.md
+
+```
+
+### building image 
+
+```
+docker  build  -t  ashuwebapp:javav1  .
+===
+
+Downloaded from central: https://repo.maven.apache.org/maven2/com/thoughtworks/xstream/xstream/1.3.1/xstream-1.3.1.jar (431 kB at 630 kB/s)
+[INFO] Packaging webapp
+[INFO] Assembling webapp [WebApp] in [/webapp/target/WebApp]
+[INFO] Processing war project
+[INFO] Copying webapp resources [/webapp/src/main/webapp]
+[INFO] Webapp assembled in [205 msecs]
+[INFO] Building war: /webapp/target/WebApp.war
+[INFO] WEB-INF/web.xml already added, skipping
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 49.143 s
+[INFO] Finished at: 2022-05-17T13:10:29Z
+[INFO] ------------------------------------------------------------------------
+Removing intermediate container fd272fe8213d
+ ---> 73e8e2644d5a
+Step 7/9 : FROM  tomcat
+ ---> 6a1271dfce51
+Step 8/9 : COPY  --from=Stage1  /webapp/target/WebApp.war  /usr/local/tomcat/webapps/
+ ---> 2a3063e0e427
+Step 9/9 : EXPOSE 8080
+ ---> Running in 9f638d0e9514
+Removing intermediate container 9f638d0e9514
+ ---> 47f5a8c37432
+Successfully built 47f5a8c37432
+Successfully tagged ashuwebapp:javav1
+```
+
+
