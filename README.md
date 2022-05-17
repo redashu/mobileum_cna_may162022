@@ -497,4 +497,63 @@ Successfully built 47f5a8c37432
 Successfully tagged ashuwebapp:javav1
 ```
 
+### creating base images 
+
+<img src="baseimg.png">
+
+### debootstrap 
+
+```
+ debootstrap  focal  mydata 
+ tar -C mydata -c . |  docker import   - focal 
+
+```
+
+### from VM to docker image 
+
+```
+tar --numeric-owner  --exclude=/proc --exclude=/sys --exclude=/boot --exclude=/home --exclude=/var --exclude=/usr/share --exclude=/libx32  --exclude=/snap  -cvf  ashu_ubuntu1.tar  / 
+
+cat  ashu_ubuntu1.tar   |  docker  import -  final:v1 
+
+
+```
+### COntainer restart policy 
+
+<img src="restart.png">
+
+### type of restart policy 
+
+<img src="pol.png">
+
+### checking restart policy 
+
+```
+docker  inspect   mattwebappc  --format='{{.Id}}'
+0b6c31f69d3e53de9b52a016d16751b323acb3c6d222b1b7feb9492c5b3a6e81
+[ashu@ip-172-31-31-222 java-springboot]$ 
+[ashu@ip-172-31-31-222 java-springboot]$ docker  inspect   mattwebappc  --format='{{.State.Status}}'
+running
+[ashu@ip-172-31-31-222 java-springboot]$ docker  inspect   mattwebappc  --format='{{.HostConfig.RestartPolicy.Name}}'
+no
+
+```
+### creating container with specific restart policy 
+
+```
+docker  run -itd  --name ashuc1  --restart  always  alpine ping localhost 
+da6c4f7381303481875099b699660634adfbf57f3aa646deb9d5a61eeec83431
+[ashu@ip-172-31-31-222 java-springboot]$ 
+[ashu@ip-172-31-31-222 java-springboot]$ 
+[ashu@ip-172-31-31-222 java-springboot]$ docker  inspect  ashuc1  --format='{{.HostConfig.RestartPolicy.Name}}'
+always
+[ashu@ip-172-31-31-222 java-springboot]$ docker  ps
+CONTAINER ID   IMAGE     COMMAND            CREATED          STATUS         PORTS     NAMES
+da6c4f738130   alpine    "ping localhost"   39 seconds ago   Up 5 seconds             ashuc1
+[ashu@ip-172-31-31-222 java-springboot]$ 
+
+
+```
+
+
 
