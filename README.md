@@ -339,6 +339,32 @@ docker-compose -f multi_app.yaml up -d
  ⠿ Container ashuc2              Started 
 ```
 
+### build image everytime using compose 
+
+```
+ docker-compose -f multi-app.yaml up -d --build  
+[+] Building 0.1s (7/7) FINISHED                                                                                             
+ => [internal] load build definition from Dockerfile                                                                    0.0s
+ => => transferring dockerfile: 31B                                                                                     0.0s
+ => [internal] load .dockerignore                                                                                       0.0s
+ => => transferring context: 2B                                                                                         0.0s
+ => [internal] load metadata for docker.io/library/nginx:latest                                                         0.0s
+ => [internal] load build context                                                                                       0.0s
+ => => transferring context: 1.97kB                                                                                     0.0s
+ => [1/2] FROM docker.io/library/nginx                                                                                  0.0s
+ => CACHED [2/2] COPY .  /usr/share/nginx/html/                                                                         0.0s
+ => exporting to image                                                                                                  0.0s
+ => => exporting layers                                                                                                 0.0s
+ => => writing image sha256:3a4c75bb6ad650028d70d9761638058fb45765dbd96450ab2f150e170ca162da                            0.0s
+ => => naming to docker.io/library/motawebapp:v001                                                                      0.0s
+[+] Running 4/4
+ ⠿ Network mota_scripts_default  Created                                                                                0.1s
+ ⠿ Container motac2              Started                                                                                1.2s
+ ⠿ Container motac3              Started                                                                                1.5s
+ ⠿ Container motac1              Started                         
+```
+
+
 
 
 
