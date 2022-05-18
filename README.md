@@ -150,6 +150,143 @@ bc77949314e1   ashubr2      bridge    local
 <img src="macvlan.png">
 
 
+### Docker Compose 
+<img src="compose.png">
+
+### COmpose installation link (COmpose is a docker client side software )
+
+[Docker_compose](https://docs.docker.com/compose/install/)
+
+### Example 1 
+
+```
+ cat  docker-compose.yaml 
+version: '3.8' # this is compose file version
+services:
+ ashuapp1: # name of app
+  image: alpine
+  container_name: ashuc1
+  command: ping localhost
+  restart: always
+[ashu@ip-172-31-31-222 ashu_scripts]$ ls
+docker-compose.yaml
+[ashu@ip-172-31-31-222 ashu_scripts]$ docker-compose up  -d 
+[+] Running 2/2
+ ⠿ Network ashu_scripts_default  Created                                                                                0.1s
+ ⠿ Container ashuc1              Started                                                                                1.1s
+[ashu@ip-172-31-31-222 ashu_scripts]$ docker-compose ps
+NAME                COMMAND             SERVICE             STATUS              PORTS
+ashuc1              "ping localhost"    ashuapp1            running             
+[ashu@ip-172-31-31-222 ashu_scripts]$ 
+
+```
+
+### more compose OPerations 
+
+```
+ docker-compose ps
+NAME                COMMAND             SERVICE             STATUS              PORTS
+ashuc1              "ping localhost"    ashuapp1            running             
+[ashu@ip-172-31-31-222 ashu_scripts]$ ls
+docker-compose.yaml
+[ashu@ip-172-31-31-222 ashu_scripts]$ docker-compose  stop 
+[+] Running 1/1
+ ⠿ Container ashuc1  Stopped                                                                                           10.2s
+[ashu@ip-172-31-31-222 ashu_scripts]$ docker-compose ps
+NAME                COMMAND             SERVICE             STATUS              PORTS
+ashuc1              "ping localhost"    ashuapp1            exited (137)        
+[ashu@ip-172-31-31-222 ashu_scripts]$ docker-compose start
+[+] Running 1/1
+ ⠿ Container ashuc1  Started                                                                                            0.8s
+[ashu@ip-172-31-31-222 ashu_scripts]$ docker-compose ps
+NAME                COMMAND             SERVICE             STATUS              PORTS
+ashuc1              "ping localhost"    ashuapp1            running             
+[ashu@ip-172-31-31-222 ashu_scripts]$ docker-compose  kill
+[+] Running 1/1
+ ⠿ Container ashuc1  Killed                                                                                             0.2s
+[ashu@ip-172-31-31-222 ashu_scripts]$ docker-compose start
+[+] Running 1/1
+ ⠿ Container ashuc1  Started                                                                                            1.0s
+[ashu@ip-172-31-31-222 ashu_scripts]$ docker-compose ps
+NAME                COMMAND             SERVICE             STATUS              PORTS
+ashuc1              "ping localhost"    ashuapp1            running             
+
+```
+
+### cleanup things created by compose use down 
+
+```
+docker-compose down 
+[+] Running 2/2
+ ⠿ Container ashuc1              Removed                                                                               10.3s
+ ⠿ Network ashu_scripts_default  Removed  
+ 
+```
+### example 2 of compose file 
+
+```
+cat  multi_app.yaml 
+version: '3.8' # this is compose file version
+services:
+ ashuapp2: # second app 
+  image: ashuwebapp:v001
+  container_name: ashuc2
+  restart: always
+  ports: # port forwarding 
+  - 1234:80 
+ ashuapp1: # name of app
+  image: alpine
+  container_name: ashuc1
+  command: ping localhost
+  restart: always 
+
+```
+
+### running file 
+
+```
+docker-compose -f  multi_app.yaml  up  -d
+[+] Running 3/3
+ ⠿ Network ashu_scripts_default  Created                                                                                0.1s
+ ⠿ Container ashuc1              Started                                                                                1.3s
+ ⠿ Container ashuc2              Started                                                                                1.2s
+[ashu@ip-172-31-31-222 ashu_scripts]$ docker-compose -f  multi_app.yaml  ps
+NAME                COMMAND                  SERVICE             STATUS              PORTS
+ashuc1              "ping localhost"         ashuapp1            running             
+ashuc2              "/docker-entrypoint.…"   ashuapp2            running             0.0.0.0:1234->80/tcp, :::1234->80/tcp
+[ashu@ip-172-31-31-222 ashu_scripts]$ docker-compose -f  multi_app.yaml  images
+Container           Repository          Tag                 Image Id            Size
+ashuc1              alpine              latest              0ac33e5f5afa        5.57MB
+ashuc2              ashuwebapp          v001                716af69008db        142MB
+[ashu@ip-172-31-31-222 ashu_scripts]$ 
+
+```
+### compose operations 
+
+```
+docker-compose -f  multi_app.yaml  ps
+NAME                COMMAND                  SERVICE             STATUS              PORTS
+ashuc1              "ping localhost"         ashuapp1            running             
+ashuc2              "/docker-entrypoint.…"   ashuapp2            running             0.0.0.0:1234->80/tcp, :::1234->80/tcp
+[ashu@ip-172-31-31-222 ashu_scripts]$ docker-compose -f  multi_app.yaml  stop ashuapp1 
+[+] Running 1/1
+ ⠿ Container ashuc1  Stopped                                                                                           10.5s
+[ashu@ip-172-31-31-222 ashu_scripts]$ docker-compose -f  multi_app.yaml  ps
+NAME                COMMAND                  SERVICE             STATUS              PORTS
+ashuc1              "ping localhost"         ashuapp1            exited (137)        
+ashuc2              "/docker-entrypoint.…"   ashuapp2            running             0.0.0.0:1234->80/tcp, :::1234->80/tcp
+[ashu@ip-172-31-31-222 ashu_scripts]$ docker-compose -f  multi_app.yaml  start  ashuapp1 
+[+] Running 1/1
+ ⠿ Container ashuc1  Started                                                                                            0.8s
+[ashu@ip-172-31-31-222 ashu_scripts]$ docker-compose ps
+NAME                COMMAND                  SERVICE             STATUS              PORTS
+ashuc1              "ping localhost"         ashuapp1            running             
+ashuc2              "/docker-entrypoint.…"   ashuapp2            running             0.0.0.0:1234->80/tcp, :::1234->80/tcp
+[ashu@ip-172-31-31-222 ashu_scripts]$ 
+
+```
+
+
 
 
 
