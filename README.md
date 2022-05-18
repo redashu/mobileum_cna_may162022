@@ -117,4 +117,30 @@ bc77949314e1   ashubr2      bridge    local
 
 <img src="br111.png">
 
+### docker networking solutions
+
+```
+ 497  docker  run -itd --name  ashucc11 --network  none  oraclelinux:8.4  
+  498  docker  exec -it  ashucc11 bash 
+  499  docker  rm  ashucc11 -f
+  500  docker  network  ls
+  501  docker network create  ashubrx1  
+  502  docker network create  ashubrx2 --subnet  192.168.1.0/24   
+  503  docker network ls
+  504  docker  run -itd --name ashubrx1c1  --network ashubrx1  alpine 
+  505  docker  run -itd --name ashubrx1c2  --network ashubrx1  alpine 
+  506  docker  run -itd --name ashubrx2c1  --network ashubrx2   alpine 
+  507  docker  run -itd --name ashubrx2c2  --network ashubrx2  --ip 192.168.1.100  alpine 
+  508  docker  exec ashubrx2c2 ifconfig 
+  509  docker  exec -it  ashubrx2c2 sh 
+  510  docker  exec -it  ashubrx1c1 sh 
+  511  history 
+  512  docker  exec -it  ashubrx1c1 sh 
+  513  docker  network connect  ashubrx2  ashubrx1c1 
+  514  docker  exec -it  ashubrx1c1 sh 
+  515  docker  network disconnect  ashubrx2  ashubrx1c1 
+  516  docker  exec -it  ashubrx1c1 sh 
+
+```
+
 
