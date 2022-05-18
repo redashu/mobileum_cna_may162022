@@ -286,6 +286,58 @@ ashuc2              "/docker-entrypoint.…"   ashuapp2            running      
 
 ```
 
+### Example 3 
+
+```
+version: '3.8' # this is compose file version
+services:
+ ashuapp3: # third app
+  image: ashuwebapp:v0011 
+  build: # building image 
+   context: mobapp_demo # location of dockerfile
+  container_name: ashuc3
+  ports:
+  - 9900:80
+ ashuapp2: # second app 
+  image: ashuwebapp:v001
+  container_name: ashuc2
+  restart: always
+  ports: # port forwarding 
+  - 1234:80 
+ ashuapp1: # name of app
+  image: alpine
+  container_name: ashuc1
+  command: ping localhost
+  restart: always
+
+```
+
+### compose up 
+
+```
+docker-compose -f multi_app.yaml up -d 
+[+] Running 0/0
+ ⠿ ashuapp3 Error                                                                                                       0.1s
+[+] Building 0.5s (7/7) FINISHED                                                                                             
+ => [internal] load build definition from Dockerfile                                                                    0.0s
+ => => transferring dockerfile: 102B                                                                                    0.0s
+ => [internal] load .dockerignore                                                                                       0.0s
+ => => transferring context: 2B                                                                                         0.0s
+ => [internal] load metadata for docker.io/library/nginx:latest                                                         0.0s
+ => [internal] load build context                                                                                       0.1s
+ => => transferring context: 94.45kB                                                                                    0.0s
+ => [1/2] FROM docker.io/library/nginx                                                                                  0.2s
+ => [2/2] COPY .  /usr/share/nginx/html/                                                                                0.1s
+ => exporting to image                                                                                                  0.0s
+ => => exporting layers                                                                                                 0.0s
+ => => writing image sha256:c4da0b78cbde6f09bb0c47b01543890649fdb6c5daa4654c1333c68fa68c8c4d                            0.0s
+ => => naming to docker.io/library/ashuwebapp:v0011                                                                     0.0s
+[+] Running 4/4
+ ⠿ Network ashu_scripts_default  Created                                                                                0.1s
+ ⠿ Container ashuc1              Started                                                                                1.4s
+ ⠿ Container ashuc3              Started                                                                                1.2s
+ ⠿ Container ashuc2              Started 
+```
 
 
 
