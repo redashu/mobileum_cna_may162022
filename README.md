@@ -521,5 +521,72 @@ minion1   Ready    <none>          35h   v1.24.0
 minion2   Ready    <none>          35h   v1.24.0
 ```
 
+### master node component -- kube-schedular 
+
+<img src="sche.png">
+
+### Etcd 
+
+<img src="etcd.png">
+
+### Minion side components 
+
+<img src="minion.png">
+
+### Deploy app in k8s 
+
+<img src="flow.png">
+
+### Intro to POd 
+
+<img src="pod.png">
+
+### pod Design 
+
+<img src="pod1.png">
+
+### sample POD file 
+
+```
+apiVersion: v1 # apiserver version 
+kind: Pod # request type is pod 
+metadata: # info about above Kind 
+ name: ashupod-123 # name of pod 
+spec:
+ containers: # we write container info
+ - name: ashuc1
+   image: nginx
+   ports:
+   - containerPort: 80 
+```
+
+### deploy pod in k8s 
+
+```
+ mkdir  k8s_apps
+[ashu@ip-172-31-31-222 ~]$ cd  k8s_apps/
+[ashu@ip-172-31-31-222 k8s_apps]$ ls
+[ashu@ip-172-31-31-222 k8s_apps]$ vim  pod1.yaml 
+[ashu@ip-172-31-31-222 k8s_apps]$ ls
+pod1.yaml
+[ashu@ip-172-31-31-222 k8s_apps]$ kubectl  create  -f  pod1.yaml 
+pod/ashupod-123 created
+[ashu@ip-172-31-31-222 k8s_apps]$ kubectl  get  pods 
+NAME          READY   STATUS              RESTARTS       AGE
+ashupod-123   0/1     ContainerCreating   0              5s
+ashupod1      1/1     Running             1 (114m ago)   12h
+ashuwebapp    1/1     Running             1 (114m ago)   12h
+[ashu@ip-172-31-31-222 k8s_apps]$ kubectl  get  pods 
+NAME          READY   STATUS    RESTARTS       AGE
+ashupod-123   1/1     Running   0              13s
+ashupod1      1/1     Running   1 (114m ago)   12h
+ashuwebapp    1/1     Running   1 (114m ago)   12h
+[ashu@ip-172-31-31-222 k8s_apps]$ kubectl  get  pods  -o wide
+NAME             READY   STATUS    RESTARTS       AGE   IP                NODE      NOMINATED NODE   READINESS GATES
+ashupod-123      1/1     Running   0              20s   192.168.34.4      minion1   <none>           <none>
+ashupod1         1/1     Running   1 (114m ago)   12h   192.168.179.199   minion2   <none>           <none>
+ashuwebapp       1/1     Running   1 (114m ago)   12h   192.168.179.200   minion2   <none>           <none>
+
+```
 
 
