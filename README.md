@@ -67,5 +67,162 @@ motawebapp       v001      3a4c75bb6ad6   17 hours ago   142MB
 motawebapp       v0011     3a4c75bb6ad6   17 hours ago   142MB
 mattwebapp       2.0       91fb8196b26d   17 hours ago   142MB
 ```
+### a customer story app
+
+<img src="app1.png">
+
+### customer app building 
+
+```
+docker  build  -t  docker.io/dockerashu/customerapp:ashuv1 .  
+Sending build context to Docker daemon  3.958MB
+Step 1/11 : FROM oraclelinux:8.4
+8.4: Pulling from library/oraclelinux
+a4df6f21af84: Already exists 
+Digest: sha256:b81d5b0638bb67030b207d28586d0e714a811cc612396dbe3410db406998b3ad
+Status: Downloaded newer image for oraclelinux:8.4
+ ---> 97e22ab49eea
+Step 2/11 : LABEL name="ashutoshh"
+ ---> Running in b828568a8306
+Removing intermediate container b828568a8306
+ ---> 22f6919fc48c
+Step 3/11 : ENV deploy=sampleapp
+ ---> Running in 5b438be6a3c3
+Removing intermediate container 5b438be6a3c3
+ ---> 122c1911ae09
+Step 4/11 : RUN yum install httpd -y && mkdir -p /customer/{app1,app2,app3}
+ ---> Running in 72834f7a4c28
+Oracle Linux 8 BaseOS Latest (x86_64)            94 MB/s |  46 MB     00:00    
+Oracle Linux 8 Application Stream (x86_64)      150 MB/s |  36 MB     00:00    
+Last metadata expiration check: 0:00:09 ago on Thu May 19 08:50:51 2022.
+Dependencies resolved.
+====================================================================================================
+ Package              Arch    Version                                       Repository          Size
+====================================================================================================
+Installing:
+ httpd                x86_64  2.4.37-47.0.1.module+el8.6.0+20649+083145da.1 ol8_appstream      1.4 M
+Installing dependencies:
+ apr                  x86_64  1.6.3-12.el8                                  ol8_appstream      129 k
+ apr-util             x86_64  1.6.1-6.el8                                   ol8_appstream      105 k
+ httpd-filesystem     noarch  2.4.37-47.0.1.module+el8.6.0+20649+083145da.1 ol8_appstream       41 k
+ httpd-tools          x86_64  2.4.37-47.0.1.module+el8.6.0+20649+083145da.1 ol8_appstream      108 k
+ mailcap              noarch  2.1.48-3.el8                                  ol8_baseos_latest   39 k
+ mod_http2            x86_64  1.15.7-5.module+el8.6.0+20548+01710940        ol8_appstream      154 k
+ oracle-logos-httpd   noarch  84.5-1.0.1.el8                                ol8_baseos_latest   29 k
+Enabling module streams:
+ httpd                        2.4                                                                   
+
+Transaction Summary
+====================================================================================================
+Install  8 Packages
+
+Total download size: 2.0 M
+Installed size: 5.4 M
+Downloading Packages:
+(1/8): mailcap-2.1.48-3.el8.noarch.rpm          375 kB/s |  39 kB     00:00    
+(2/8): oracle-logos-httpd-84.5-1.0.1.el8.noarch 257 kB/s |  29 kB     00:00    
+(3/8): apr-util-1.6.1-6.el8.x86_64.rpm          5.8 MB/s | 105 kB     00:00    
+(4/8): apr-1.6.3-12.el8.x86_64.rpm              1.0 MB/s | 129 kB     00:00    
+(5/8): httpd-filesystem-2.4.37-47.0.1.module+el  13 MB/s |  41 kB     00:00    
+(6/8): httpd-tools-2.4.37-47.0.1.module+el8.6.0  29 MB/s | 108 kB     00:00    
+(7/8): mod_http2-1.15.7-5.module+el8.6.0+20548+  37 MB/s | 154 kB     00:00    
+(8/8): httpd-2.4.37-47.0.1.module+el8.6.0+20649  33 MB/s | 1.4 MB     00:00    
+--------------------------------------------------------------------------------
+Total                                            12 MB/s | 2.0 MB     00:00     
+Running transaction check
+Transaction check succeeded.
+Running transaction test
+Transaction test succeeded.
+Running transaction
+  Preparing        :                                                        1/1 
+  Installing       : apr-1.6.3-12.el8.x86_64                                1/8 
+  Running scriptlet: apr-1.6.3-12.el8.x86_64                                1/8 
+  Installing       : apr-util-1.6.1-6.el8.x86_64                            2/8 
+  Running scriptlet: apr-util-1.6.1-6.el8.x86_64                            2/8 
+  Installing       : httpd-tools-2.4.37-47.0.1.module+el8.6.0+20649+08314   3/8 
+  Running scriptlet: httpd-filesystem-2.4.37-47.0.1.module+el8.6.0+20649+   4/8 
+  Installing       : httpd-filesystem-2.4.37-47.0.1.module+el8.6.0+20649+   4/8 
+  Installing       : oracle-logos-httpd-84.5-1.0.1.el8.noarch               5/8 
+  Installing       : mailcap-2.1.48-3.el8.noarch                            6/8 
+  Installing       : mod_http2-1.15.7-5.module+el8.6.0+20548+01710940.x86   7/8 
+  Installing       : httpd-2.4.37-47.0.1.module+el8.6.0+20649+083145da.1.   8/8 
+  Running scriptlet: httpd-2.4.37-47.0.1.module+el8.6.0+20649+083145da.1.   8/8 
+  Verifying        : mailcap-2.1.48-3.el8.noarch                            1/8 
+  Verifying        : oracle-logos-httpd-84.5-1.0.1.el8.noarch               2/8 
+  Verifying        : apr-1.6.3-12.el8.x86_64                                3/8 
+  Verifying        : apr-util-1.6.1-6.el8.x86_64                            4/8 
+  Verifying        : httpd-2.4.37-47.0.1.module+el8.6.0+20649+083145da.1.   5/8 
+  Verifying        : httpd-filesystem-2.4.37-47.0.1.module+el8.6.0+20649+   6/8 
+  Verifying        : httpd-tools-2.4.37-47.0.1.module+el8.6.0+20649+08314   7/8 
+  Verifying        : mod_http2-1.15.7-5.module+el8.6.0+20548+01710940.x86   8/8 
+
+Installed:
+  apr-1.6.3-12.el8.x86_64                                                       
+  apr-util-1.6.1-6.el8.x86_64                                                   
+  httpd-2.4.37-47.0.1.module+el8.6.0+20649+083145da.1.x86_64                    
+  httpd-filesystem-2.4.37-47.0.1.module+el8.6.0+20649+083145da.1.noarch         
+  httpd-tools-2.4.37-47.0.1.module+el8.6.0+20649+083145da.1.x86_64              
+  mailcap-2.1.48-3.el8.noarch                                                   
+  mod_http2-1.15.7-5.module+el8.6.0+20548+01710940.x86_64                       
+  oracle-logos-httpd-84.5-1.0.1.el8.noarch                                      
+
+Complete!
+Removing intermediate container 72834f7a4c28
+ ---> 52653c6f9082
+Step 5/11 : COPY html-sample-app /customer/app1/
+ ---> 4be7ee4a46ef
+Step 6/11 : COPY project-html-website /customer/app2/
+ ---> b25e5c4d9092
+Step 7/11 : COPY project-website-template /customer/app3/
+ ---> c488df0f3f6f
+Step 8/11 : COPY deploy.sh /customer/
+ ---> 50301bcaf2ca
+Step 9/11 : WORKDIR /customer
+ ---> Running in 529c07487c97
+Removing intermediate container 529c07487c97
+ ---> 793b1fd1fb9f
+Step 10/11 : RUN chmod +x  deploy.sh
+ ---> Running in 24101b8bc8d7
+Removing intermediate container 24101b8bc8d7
+ ---> 8e9549de2658
+Step 11/11 : ENTRYPOINT ["./deploy.sh"]
+ ---> Running in 050e909937b9
+Removing intermediate container 050e909937b9
+ ---> 7578da182baa
+Successfully built 7578da182baa
+Successfully tagged dockerashu/customerapp:ashuv1
+```
+
+### container with command image
+```
+ docker  run -itd --name ashut1  -p 1122:80 08c85414d033
+e891abb6d456a61566fd409851fbc07fb890186546449b51dab3b52c922b0eca
+[ashu@ip-172-31-31-222 customer_app]$ docker  exec  ashut1 env
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+HOSTNAME=e891abb6d456
+deploy=sampleapp
+HOME=/root
+[ashu@ip-172-31-31-222 customer_app]$ docker rm ashut1 -f
+ashut1
+[ashu@ip-172-31-31-222 customer_app]$ docker  run -itd --name ashut1  -p 1122:80 -e deploy=app3  08c85414d033
+d35da8b5ab6a67ddfaa4198633b707331f7e3ff2b5779a110402ffe32bb61917
+[ashu@ip-172-31-31-222 customer_app]$ docker  exec  ashut1 env
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+HOSTNAME=d35da8b5ab6a
+deploy=app3
+HOME=/root
+[ashu@ip-172-31-31-222 customer_app]$ docker rm ashut1 -f
+ashut1
+[ashu@ip-172-31-31-222 customer_app]$ docker  run -itd --name ashut1  -p 1122:80 -e deploy=app2  08c85414d033
+73d376e4d15b3e9e987f448fa4dcb4aaed5cb599c5ae2ef6596defec5e89036e
+[ashu@ip-172-31-31-222 customer_app]$ docker  exec  ashut1 env
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+HOSTNAME=73d376e4d15b
+deploy=app2
+HOME=/root
+
+```
+
+
 
 
