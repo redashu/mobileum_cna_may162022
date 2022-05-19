@@ -238,5 +238,153 @@ rsync -avp  /var/lib/docker/ /opt/docker-server/
  systemctl daemon-reload 
  systemctl restart docker
 ```
+### COntainer storage
+
+<img src="stcont.png">
+
+### MYSQL db container without storage 
+
+```
+docker  run -d  --name ashudb1  -e  MYSQL_ROOT_PASSWORD="Docker@099#" mysql
+Unable to find image 'mysql:latest' locally
+latest: Pulling from library/mysql
+c32ce6654453: Pull complete 
+415d08ee031a: Pull complete 
+7a38fec2542f: Pull complete 
+352881ee8fe9: Pull complete 
+
+```
+
+### creating db in container 
+
+```
+[ashu@ip-172-31-31-222 ~]$ docker  exec -it  ashudb1  bash
+root@1b1b2e8bfdcd:/# 
+root@1b1b2e8bfdcd:/# 
+root@1b1b2e8bfdcd:/# mysql -u root -p
+Enter password: 
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 8
+Server version: 8.0.29 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2022, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+4 rows in set (0.01 sec)
+
+mysql> create  database ashudb1;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| ashudb1            |
+| information_schema |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+5 rows in set (0.00 sec)
+
+
+```
+
+### Now creating container with VOlume 
+
+```
+ docker  run -d  --name ashudb1  -e  MYSQL_ROOT_PASSWORD="Docker@099#"   -v   ashuvol1:/var/lib/mysql/     mysql
+bfbc717c4496dc7cfcdd30881c939d3952937fe6a4a28d098c37537a2b8f43ef
+[ashu@ip-172-31-31-222 ~]$ docker logs  ashudb1
+2022-05-19 10:22:29+00:00 [Note] [Entrypoint]: Entrypoint script for MySQL Server 8.0.29-1debian10 started.
+2022-05-19 10:22:29+00:00 [Note] [Entrypoint]: Switching to dedicated user 'mysql'
+2022-05-19 10:22:29+00:00 [Note] [Entrypoint]: Entrypoint script for MySQL Server 8.0.29-1debian10 started.
+2022-05-19 10:22:29+00:00 [Note] [Entrypoint]: Initializing database files
+2022-05-19T10:22:29.597789Z 0 [System] [MY-013169] [Server] /usr/sbin/mysqld (mysqld 8.0.29) initializing of server in progress as process 44
+2022-05-19T10:22:29.605031Z 1 [System] [MY-013576] [InnoDB] InnoDB initialization has started.
+2022-05-19T10:22:30.059486Z 1 [System] [MY-0135
+```
+
+### COntainer with volume 
+
+```
+  667  docker  run -d  --name ashudb1  -e  MYSQL_ROOT_PASSWORD="Docker@099#"   -v   ashuvol1:/var/lib/mysql/   -p 1122:3306   mysql
+  668  docker  exec -it  ashudb1 bash 
+  669  history 
+[ashu@ip-172-31-31-222 ~]$ docker  volume  inspect  ashuvol1
+[
+    {
+        "CreatedAt": "2022-05-19T10:31:20Z",
+        "Driver": "local",
+        "Labels": {},
+        "Mountpoint": "/opt/docker-server/volumes/ashuvol1/_data",
+        "Name": "ashuvol1",
+        "Options": {},
+        "Scope": "local"
+    }
+]
+
+```
+
+### sharing volume with readonly option 
+
+```
+docker  run -it --name backup -v  ashuvol1:/mnt/backup:ro  alpine sh 
+/ # 
+/ # 
+/ # cd /mnt/backup/
+/mnt/backup # ls
+#ib_16384_0.dblwr   binlog.000002       ca.pem              ib_logfile1         performance_schema  sys
+#ib_16384_1.dblwr   binlog.000003       client-cert.pem     ibdata1             private_key.pem     test1
+#innodb_temp        binlog.000004       client-key.pem      ibtmp1              public_key.pem      undo_001
+auto.cnf            binlog.index        ib_buffer_pool      mysql               server-cert.pem     undo_002
+binlog.000001       ca-key.pem          ib_logfile0         mysql.ibd           server-key.pem
+/mnt/backup # rm ca.pem 
+rm: remove 'ca.pem'? y
+rm: can't remove 'ca.pem': Read-only file system
+/mnt/backup # exit
+
+```
+
+
+### VOlume mounting 
+
+```
+docker  run -it --name backup -v  ashuvol1:/mnt/backup:ro  alpine sh 
+/ # 
+/ # 
+/ # cd /mnt/backup/
+/mnt/backup # ls
+#ib_16384_0.dblwr   binlog.000002       ca.pem              ib_logfile1         performance_schema  sys
+#ib_16384_1.dblwr   binlog.000003       client-cert.pem     ibdata1             private_key.pem     test1
+#innodb_temp        binlog.000004       client-key.pem      ibtmp1              public_key.pem      undo_001
+auto.cnf            binlog.index        ib_buffer_pool      mysql               server-cert.pem     undo_002
+binlog.000001       ca-key.pem          ib_logfile0         mysql.ibd           server-key.pem
+/mnt/backup # rm ca.pem 
+rm: remove 'ca.pem'? y
+rm: can't remove 'ca.pem': Read-only file system
+/mnt/backup # exit
+
+```
+
+### multiple volumes 
+
+```
+docker  run -it --name backup -v  ashuvol1:/mnt/backup:ro   -v  ashuvol2:/mnt/data:rw   alpine sh
+```
 
 
