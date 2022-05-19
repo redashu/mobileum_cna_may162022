@@ -426,3 +426,100 @@ clientVersion:
 kustomizeVersion: v4.5.4
 
 ```
+
+## Understanding Master and Minion Node components 
+
+### Master Node / control plane 
+
+### kube-apiserver 
+
+<img src="api.png">
+
+### trying to send request to k8s master from k8s client -- 
+
+```
+kubectl   version -oyaml
+clientVersion:
+  buildDate: "2022-05-03T13:46:05Z"
+  compiler: gc
+  gitCommit: 4ce5a8954017644c5420bae81d72b09b735c21f0
+  gitTreeState: clean
+  gitVersion: v1.24.0
+  goVersion: go1.18.1
+  major: "1"
+  minor: "24"
+  platform: linux/amd64
+kustomizeVersion: v4.5.4
+
+Error from server (Forbidden): <html><head><meta http-equiv='refresh' content='1;url=/login?from=%2Fversion%3Ftimeout%3D32s'/><script>window.location.replace('/login?from=%2Fversion%3Ftimeout%3D32s');</script></head><body style='background-color:white; color:white;'>
+
+
+Authentication required
+<!--
+-->
+
+
+```
+
+### Auth token file on master server 
+```
+cd  /etc/kubernetes/
+[root@master kubernetes]# ls
+admin.conf 
+
+```
+
+### after downloading from master to client machine auth token file 
+
+```
+ kubectl   version -oyaml   --kubeconfig  admin.conf 
+clientVersion:
+  buildDate: "2022-05-03T13:46:05Z"
+  compiler: gc
+  gitCommit: 4ce5a8954017644c5420bae81d72b09b735c21f0
+  gitTreeState: clean
+  gitVersion: v1.24.0
+  goVersion: go1.18.1
+  major: "1"
+  minor: "24"
+  platform: linux/amd64
+kustomizeVersion: v4.5.4
+serverVersion:
+  buildDate: "2022-05-03T13:38:19Z"
+  compiler: gc
+  gitCommit: 4ce5a8954017644c5420bae81d72b09b735c21f0
+  gitTreeState: clean
+  gitVersion: v1.24.0
+  goVersion: go1.18.1
+  major: "1"
+  minor: "24"
+  platform: linux/amd64
+
+[ashu@ip-172-31-31-222 ~]$ kubectl get  nodes   --kubeconfig  admin.conf 
+NAME      STATUS   ROLES           AGE   VERSION
+master    Ready    control-plane   35h   v1.24.0
+minion1   Ready    <none>          35h   v1.24.0
+minion2   Ready    <none>          35h   v1.24.0
+```
+
+### copy auth file -- kubeconfig file in homedirectory or user .kube/config 
+
+```
+pwd
+/home/ashu
+[ashu@ip-172-31-31-222 ~]$ mkdir .kube
+mkdir: cannot create directory '.kube': File exists
+[ashu@ip-172-31-31-222 ~]$ ls
+admin.conf  ashu_scripts  helloc1.txt  images  index.html
+[ashu@ip-172-31-31-222 ~]$ cp  admin.conf   .kube/config 
+[ashu@ip-172-31-31-222 ~]$ 
+[ashu@ip-172-31-31-222 ~]$ 
+[ashu@ip-172-31-31-222 ~]$ kubectl  get nodes
+NAME      STATUS   ROLES           AGE   VERSION
+master    Ready    control-plane   35h   v1.24.0
+minion1   Ready    <none>          35h   v1.24.0
+minion2   Ready    <none>          35h   v1.24.0
+```
+
+
+
