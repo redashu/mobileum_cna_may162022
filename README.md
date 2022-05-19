@@ -223,6 +223,20 @@ HOME=/root
 
 ```
 
+## Storage in Docker 
 
+<img src="t.png">
+
+### configure Docker storage in docker host 
+
+[LInktoimplement](https://github.com/redashu/docker/tree/master/docker_storage)
+
+### for data migration 
+
+```
+rsync -avp  /var/lib/docker/ /opt/docker-server/
+ systemctl daemon-reload 
+ systemctl restart docker
+```
 
 
