@@ -387,4 +387,42 @@ rm: can't remove 'ca.pem': Read-only file system
 docker  run -it --name backup -v  ashuvol1:/mnt/backup:ro   -v  ashuvol2:/mnt/data:rw   alpine sh
 ```
 
+### k8s architecture 
 
+<img src="k8s1.png">
+
+### Installing and checking kubectl on client side 
+
+### installation link 
+[linux](https://kubernetes.io/docs/tasks/tools/)
+
+```
+fire@ashutoshhs-MacBook-Air ~ % kubectl version --client --output=json 
+{
+  "clientVersion": {
+    "major": "1",
+    "minor": "24",
+    "gitVersion": "v1.24.0",
+    "gitCommit": "4ce5a8954017644c5420bae81d72b09b735c21f0",
+    "gitTreeState": "clean",
+    "buildDate": "2022-05-03T13:46:05Z",
+    "goVersion": "go1.18.1",
+    "compiler": "gc",
+    "platform": "darwin/amd64"
+  },
+  "kustomizeVersion": "v4.5.4"
+}
+fire@ashutoshhs-MacBook-Air ~ % kubectl version --client --output=yaml   
+clientVersion:
+  buildDate: "2022-05-03T13:46:05Z"
+  compiler: gc
+  gitCommit: 4ce5a8954017644c5420bae81d72b09b735c21f0
+  gitTreeState: clean
+  gitVersion: v1.24.0
+  goVersion: go1.18.1
+  major: "1"
+  minor: "24"
+  platform: darwin/amd64
+kustomizeVersion: v4.5.4
+
+```
