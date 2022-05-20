@@ -260,5 +260,17 @@ Handling connection for 1122
 
 
 ```
+# TO access app from public / end user we are introducing Internal Load Balancer 
+
+<img src="lb.png">
+
+### Service Resource and its category 
+
+<img src="svc.png">
+
+
+
+
+
 
 
