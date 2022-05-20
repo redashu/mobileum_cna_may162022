@@ -361,6 +361,64 @@ alexlb2               LoadBalancer   10.104.217.109   <pending>     80:31907/TCP
 
 ```
 
+## Namespace in ks8 
+
+```
+[ashu@ip-172-31-31-222 ~]$ kubectl  get  ns
+NAME              STATUS   AGE
+default           Active   2d11h
+kube-node-lease   Active   2d11h
+kube-public       Active   2d11h
+kube-system       Active   2d11h
+[ashu@ip-172-31-31-222 ~]$ kubectl create  namespace  ashu-project 
+namespace/ashu-project created
+[ashu@ip-172-31-31-222 ~]$ kubectl  get  ns
+NAME              STATUS   AGE
+ashu-project      Active   2s
+default           Active   2d11h
+kube-node-lease   Active   2d11h
+kube-public       Active   2d11h
+kube-system       Active   2d11h
+```
+
+### creating namespace in setting it as default 
+
+```
+[ashu@ip-172-31-31-222 ~]$ kubectl   get  pods
+No resources found in default namespace.
+[ashu@ip-172-31-31-222 ~]$ 
+[ashu@ip-172-31-31-222 ~]$ 
+[ashu@ip-172-31-31-222 ~]$ kubectl  config set-context --current --namespace ashu-project
+Context "kubernetes-admin@kubernetes" modified.
+[ashu@ip-172-31-31-222 ~]$ 
+[ashu@ip-172-31-31-222 ~]$ kubectl   get  pods
+No resources found in ashu-project namespace.
+```
+
+### 
+
+```
+ cd  k8s_apps/
+[ashu@ip-172-31-31-222 k8s_apps]$ ls
+ashupod1.yaml  auto.yaml  customerpod.yaml  logs.txt  nodeportsvc.yaml  pod1.yaml  task1.yaml
+[ashu@ip-172-31-31-222 k8s_apps]$ 
+[ashu@ip-172-31-31-222 k8s_apps]$ 
+[ashu@ip-172-31-31-222 k8s_apps]$ kubectl  create  -f  customerpod.yaml  -f  nodeportsvc.yaml  
+pod/ashuwebpod1 created
+service/ashuinternal-lb1 created
+[ashu@ip-172-31-31-222 k8s_apps]$ kubectl   get  pod,svc
+NAME              READY   STATUS    RESTARTS   AGE
+pod/ashuwebpod1   1/1     Running   0          7s
+
+NAME                       TYPE       CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE
+service/ashuinternal-lb1   NodePort   10.103.145.13   <none>        1234:30722/TCP   7s
+[ashu@ip-172-31-31-222 k8s_apps]$ 
+
+
+```
+
+
+
 
 
 
