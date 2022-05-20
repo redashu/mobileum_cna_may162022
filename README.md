@@ -151,5 +151,59 @@ pod "davidpod-001" deleted
 
 ```
 
+### AUto generate YAML / JSON file 
+
+```
+kubectl  run ashupod1  --image=nginx  --port 80 --dry-run=client -o yaml 
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: ashupod1
+  name: ashupod1
+spec:
+  containers:
+
+```
+
+### testing file 
+
+```
+ kubectl  create  -f  auto.yaml 
+pod/ashupod1 created
+[ashu@ip-172-31-31-222 k8s_apps]$ kubectl  get pods
+NAME           READY   STATUS      RESTARTS      AGE
+alexpod1       1/1     Running     0             91s
+arpitapod1     1/1     Running     0             99s
+ashupod1       1/1     Running     0             4s
+mallapp        0/1     Completed   4 (47s ago)   95s
+sanjayap-007   1/1     Running     0             21m
+[ashu@ip-172-31-31-222 k8s_apps]$ kubectl delete -f  auto.yaml 
+pod "ashupod1" deleted
+
+```
+
+### creating pod from cli 
+
+```
+kubectl  run ashupod1  --image=nginx  --port 80 
+pod/ashupod1 created
+[ashu@ip-172-31-31-222 k8s_apps]$ 
+[ashu@ip-172-31-31-222 k8s_apps]$ 
+[ashu@ip-172-31-31-222 k8s_apps]$ kubectl   get po
+NAME           READY   STATUS             RESTARTS      AGE
+arpitapod1     1/1     Running            0             3m21s
+ashupod1       1/1     Running            0             5s
+mallapp        0/1     CrashLoopBackOff   5 (16s ago)   3m17s
+malliapp       0/1     CrashLoopBackOff   3 (28s ago)   68s
+nikospod1      1/1     Running            0             100s
+pradeep-007    1/1     Running            0             33s
+sanjayap-007   1/1     Running            0             23m
+[ashu@ip-172-31-31-222 k8s_apps]$ kubectl  delete pod ashupod1
+pod "ashupod1" deleted
+
+```
+
 
 
