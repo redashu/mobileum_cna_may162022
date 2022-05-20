@@ -268,6 +268,37 @@ Handling connection for 1122
 
 <img src="svc.png">
 
+### creating service 
+
+```
+kubectl create  service  
+Create a service using a specified subcommand.
+
+Aliases:
+service, svc
+
+Available Commands:
+  clusterip      Create a ClusterIP service
+  externalname   Create an ExternalName service
+  loadbalancer   Create a LoadBalancer service
+  nodeport       Create a NodePort service
+```
+
+
+### NodePOrt service 
+
+```
+kubectl create  service  nodeport  ashuinternal_lb1  --tcp 1234:80  --dry-run=client -o    yaml   >nodeportsvc.yaml 
+```
+
+### Understanding 
+
+<img src="np.png">
+
+### more details
+
+<img src="np1.png">
+
 
 
 
