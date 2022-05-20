@@ -417,6 +417,87 @@ service/ashuinternal-lb1   NodePort   10.103.145.13   <none>        1234:30722/T
 
 ```
 
+### Azure container registry image push 
+
+```
+docker  tag  dockerashu/mobi:v2  ashutoshh.azurecr.io/mobi:v2
+[ashu@ip-172-31-31-222 k8s_apps]$ 
+[ashu@ip-172-31-31-222 k8s_apps]$ docker login ashutoshh.azurecr.io
+Username: ashutoshh
+Password: 
+WARNING! Your password will be stored unencrypted in /home/ashu/.docker/config.json.
+Configure a credential helper to remove this warning. See
+https://docs.docker.com/engine/reference/commandline/login/#credentials-store
+
+Login Succeeded
+[ashu@ip-172-31-31-222 k8s_apps]$ docker  push  ashutoshh.azurecr.io/mobi:v2
+The push refers to repository [ashutoshh.azurecr.io/mobi]
+07799f1ae366: Pushed 
+a059c9abe376: Pushed 
+09be960dcde4: Pushed 
+18be1897f940: Pushed 
+dfe7577521f0: Pushed 
+d253f69cb991: Pushed 
+fd95118eade9: Pushed 
+
+```
+
+### secret 
+
+```
+ kubectl create  secret  
+Create a secret using specified subcommand.
+
+Available Commands:
+  docker-registry   Create a secret for use with a Docker registry
+  generic           Create a secret from a local file, directory, or literal value
+  tls               Create a TLS secret
+
+Usage:
+  kubectl create secret [flags] [options]
+
+Use "kubectl <command> --help" for more information about a given command.
+Use "kubectl options" for a list of global command-line options (applies to all commands).
+[ashu@ip-172-31-31-222 k8s_apps]$ kubectl create  secret  docker-registry  ashu-sec  --docker-server=ashutoshh.azurecr.io     --docker-username=ashutoshh --docker-password="lf5MQZaJpmI3oh2xC8Qeet+DZggrBkUq"
+secret/ashu-sec created
+[ashu@ip-172-31-31-222 k8s_apps]$ kubectl   get secret
+NAME       TYPE                             DATA   AGE
+ashu-sec   kubernetes.io/dockerconfigjson   1      5s
+```
+
+### apply secret in POD file 
+
+```
+[ashu@ip-172-31-31-222 k8s_apps]$ cat  acrpod.yaml 
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: ashuweb1
+  name: ashuweb1
+spec:
+  imagePullSecrets: # to call in this pod 
+  - name: ashu-sec # name of secret
+  containers:
+  - image: ashutoshh.azurecr.io/mobi:v2
+    name: ashuweb1
+    ports:
+    - containerPort: 80
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}
+[ashu@ip-172-31-31-222 k8s_apps]$ kubectl create -f  acrpod.yaml 
+pod/ashuweb1 created
+[ashu@ip-172-31-31-222 k8s_apps]$ kubectl   get  po
+NAME       READY   STATUS    RESTARTS   AGE
+ashuweb1   1/1     Running   0          3s
+[ashu@ip-172-31-31-222 k8s_apps]$ 
+
+```
+
+
 
 
 
