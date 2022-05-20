@@ -232,6 +232,33 @@ spec:
 ```
 
 
+## networking in k8s 
 
+### POd Networking. with CNI 
+
+### CNI bridge using any cni Plugin
+
+<img src="cni.png">
+
+### to access app locally from K8s client system 
+
+```
+ kubectl  get po  ashuwebpod1  -o wide
+NAME          READY   STATUS    RESTARTS   AGE     IP                NODE      NOMINATED NODE   READINESS GATES
+ashuwebpod1   1/1     Running   0          2m17s   192.168.179.200   minion2   <none>           <none>
+[ashu@ip-172-31-31-222 k8s_apps]$ curl http://192.168.179.200
+^C
+[ashu@ip-172-31-31-222 k8s_apps]$ kubectl port-forward  ashuwebpod1  1122:80 
+Forwarding from 127.0.0.1:1122 -> 80
+Forwarding from [::1]:1122 -> 80
+Handling connection for 1122
+Handling connection for 1122
+^C[ashu@ip-172-31-31-222 k8s_apps]$ 
+[ashu@ip-172-31-31-222 k8s_apps]$ 
+[ashu@ip-172-31-31-222 k8s_apps]$ 
+[ashu@ip-172-31-31-222 k8s_apps]$ 
+
+
+```
 
 
