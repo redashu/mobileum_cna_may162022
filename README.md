@@ -204,6 +204,34 @@ sanjayap-007   1/1     Running            0             23m
 pod "ashupod1" deleted
 
 ```
+### task 
+
+```
+[ashu@ip-172-31-31-222 k8s_apps]$ cat  task1.yaml 
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: ashutoshhpod1
+  name: ashutoshhpod1
+spec:
+  containers:
+  - image: busybox
+    name: ashutoshhpod1
+    command: ["sh","-c","ping fb.com"] # to replace default process in k8s 
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+```
+
+### supply command option using cli 
+
+```
+ kubectl run pod1 --image=busybox --command ping fb.com  --dry-run=client -oyaml
+```
+
+
 
 
 
