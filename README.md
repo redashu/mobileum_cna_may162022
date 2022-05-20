@@ -344,6 +344,22 @@ NAME               TYPE       CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE
 ashuinternal-lb1   NodePort   10.102.130.81   <none>        1234:32128/TCP   23s   run=ashuwebpod1
 ```
 
+### External LB and DNS INtro 
+<img src="Lb.png">
+
+### loadbalancer svc with k8s cluster deployment methods 
+
+<img src="method.png">
+
+```
+ kubectl  expose pod alexwebpod2 --type LoadBalancer --port 80 --name alexlb2
+service/alexlb2 exposed
+[ashu@ip-172-31-31-222 ~]$ kubectl get svc |  grep -i ale
+alexinternal-lb1      NodePort       10.107.188.142   <none>        12345:30764/TCP   33m
+alexlb2               LoadBalancer   10.104.217.109   <pending>     80:31907/TCP      9s
+[ashu@ip-172-31-31-222 ~]$ kubectl get svc |  grep -i ale
+
+```
 
 
 
