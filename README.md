@@ -300,6 +300,49 @@ kubectl create  service  nodeport  ashuinternal_lb1  --tcp 1234:80  --dry-run=cl
 <img src="np1.png">
 
 
+### k8s internal LB will find relevant pod using POd labels 
+
+### lets check labels of pod 
+
+```
+$ kubectl get po  ashuwebpod1  --show-labels
+NAME          READY   STATUS    RESTARTS   AGE    LABELS
+ashuwebpod1   1/1     Running   0          139m   run=ashuwebpod1
+
+```
+
+### configuring service selector to find pod 
+
+```
+[ashu@ip-172-31-31-222 k8s_apps]$ kubectl get po  ashuwebpod1  --show-labels
+NAME          READY   STATUS    RESTARTS   AGE    LABELS
+ashuwebpod1   1/1     Running   0          142m   run=ashuwebpod1
+[ashu@ip-172-31-31-222 k8s_apps]$ cat nodeportsvc.yaml 
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: ashuinternal-lb1
+  name: ashuinternal-lb1
+spec:
+  ports:
+  - name: 1234-80
+    port: 1234
+    protocol: TCP
+    targetPort: 80
+  selector: # pod finder field 
+    run: ashuwebpod1 # label of pod to find 
+  type: NodePort
+status:
+  loadBalancer: {}
+[ashu@ip-172-31-31-222 k8s_apps]$ kubectl  replace -f nodeportsvc.yaml  --force 
+service "ashuinternal-lb1" deleted
+service/ashuinternal-lb1 replaced
+[ashu@ip-172-31-31-222 k8s_apps]$ kubectl  get svc  ashuinternal-lb1 -o wide
+NAME               TYPE       CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE   SELECTOR
+ashuinternal-lb1   NodePort   10.102.130.81   <none>        1234:32128/TCP   23s   run=ashuwebpod1
+```
 
 
 
