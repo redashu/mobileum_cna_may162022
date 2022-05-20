@@ -46,5 +46,11 @@ services:
   command: ping localhost
   restart: always 
 ```
+### POrtainer as docker webui Client 
+
+```
+$ docker run -itd --name webui -v /var/run/docker.sock:/var/run/docker.sock -p 9000:9000  portainer/portainer 
+```
+
 
 
