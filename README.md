@@ -349,5 +349,55 @@ index.html           100% |*****************************************************
 ```
 
 
+### creating webui for k8s operations 
+
+```
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.5.0/aio/deploy/recommended.yaml
+namespace/kubernetes-dashboard created
+serviceaccount/kubernetes-dashboard created
+service/kubernetes-dashboard created
+secret/kubernetes-dashboard-certs created
+secret/kubernetes-dashboard-csrf created
+secret/kubernetes-dashboard-key-holder created
+configmap/kubernetes-dashboard-settings created
+role.rbac.authorization.k8s.io/kubernetes-dashboard created
+clusterrole.rbac.authorization.k8s.io/kubernetes-dashboard created
+rolebinding.rbac.authorization.k8s.io/kubernetes-dashboard created
+clusterrolebinding.rbac.authorization.k8s.io/kubernetes-dashboard created
+deployment.apps/kubernetes-dashboard created
+service/dashboard-metrics-scraper created
+deployment.apps/dashboard-metrics-scraper created
+[ashu@client-machine ~]$ 
+
+```
+
+### verify it 
+
+```
+
+ashu@client-machine ~]$ kubectl  get  deploy -n kubernetes-dashboard
+NAME                        READY   UP-TO-DATE   AVAILABLE   AGE
+dashboard-metrics-scraper   1/1     1            1           64s
+kubernetes-dashboard        1/1     1            1           64s
+[ashu@client-machine ~]$ kubectl  get   po  -n kubernetes-dashboard
+NAME                                         READY   STATUS    RESTARTS   AGE
+dashboard-metrics-scraper-7bfdf779ff-xv95s   1/1     Running   0          71s
+kubernetes-dashboard-6cdd697d84-vz7hs        1/1     Running   0          72s
+[ashu@client-machine ~]$ 
+[ashu@client-machine ~]$ kubectl  get   svc  -n kubernetes-dashboard
+NAME                        TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)    AGE
+dashboard-metrics-scraper   ClusterIP   10.103.225.176   <none>        8000/TCP   79s
+kubernetes-dashboard        ClusterIP   10.99.199.15     <none>        443/TCP    79s
+[ashu@client-machine ~]$ kubectl edit   svc  kubernetes-dashboard  -n kubernetes-dashboard
+service/kubernetes-dashboard edited
+[ashu@client-machine ~]$ kubectl  get   svc  -n kubernetes-dashboard
+NAME                        TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)         AGE
+dashboard-metrics-scraper   ClusterIP   10.103.225.176   <none>        8000/TCP        2m10s
+kubernetes-dashboard        NodePort    10.99.199.15     <none>        443:31498/TCP   2m10s
+[ashu@client-machine ~]$ 
+
+```
+
+
 
 
