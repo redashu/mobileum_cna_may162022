@@ -313,6 +313,40 @@ ashuapp1   Deployment/ashuapp1   0%/10%    3         20        3          57s
 <img src="pod1.yaml">
 
 
+### coredns is k8s internal dns for pod and their service 
+
+```
+$ 
+[ashu@client-machine ~]$ kubectl run app1 --image=nginx  
+pod/app1 created
+[ashu@client-machine ~]$ 
+[ashu@client-machine ~]$ kubectl   get  po 
+NAME   READY   STATUS    RESTARTS   AGE
+app1   1/1     Running   0          3s
+[ashu@client-machine ~]$ kubectl  expose pod app1  --port 80  --name lb1 
+service/lb1 exposed
+[ashu@client-machine ~]$ 
+[ashu@client-machine ~]$ kubectl   get  svc
+NAME   TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)   AGE
+lb1    ClusterIP   10.97.18.138   <none>        80/TCP    4s
+[ashu@client-machine ~]$ 
+[ashu@client-machine ~]$ 
+[ashu@client-machine ~]$ 
+[ashu@client-machine ~]$ kubectl  run -it --rm --image=busybox  sh 
+If you don't see a command prompt, try pressing enter.
+/ # 
+/ # 
+/ # 
+/ # curl 
+sh: curl: not found
+/ # wget  http://lb1
+Connecting to lb1 (10.97.18.138:80)
+saving to 'index.html'
+index.html           100% |****************************************************************************|   615  0:00:00 ETA
+'index.html' saved
+/ # 
+
+```
 
 
 
