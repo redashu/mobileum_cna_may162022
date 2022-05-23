@@ -397,6 +397,48 @@ kubernetes-dashboard        NodePort    10.99.199.15     <none>        443:31498
 [ashu@client-machine ~]$ 
 
 ```
+### 1.24 k8s version need manual secret account creation 
+
+```
+cat  access.yaml 
+apiVersion: v1
+kind: Secret
+type: kubernetes.io/service-account-token
+metadata:
+  name: kubernetes-dashboard
+  annotations:
+    kubernetes.io/service-account.name: "kubernetes-dashboard"
+    
+```
+
+### checking secret 
+
+```
+kubectl apply -f  access.yaml  -n kubernetes-dashboard
+secret/kubernetes-dashboard created
+[ashu@client-machine ~]$ kubectl  get  secret -n kubernetes-dashboard
+NAME                              TYPE                                  DATA   AGE
+kubernetes-dashboard              kubernetes.io/service-account-token   3      6s
+kubernetes-dashboard-certs        Opaque                                0      100m
+kubernetes-dashboard-csrf         Opaque                                1      100m
+kubernetes-dashboard-key-holder   Opaque                                2      100m
+[ashu@client-machine ~]$ kubectl describe secret  kubernetes-dashboard -n kubernetes-dashboard
+Name:         kubernetes-dashboard
+Namespace:    kubernetes-dashboard
+Labels:       <none>
+Annotations:  kubernetes.io/service-account.name: kubernetes-dashboard
+              kubernetes.io/service-account.uid: f877ab9d-68d6-430f-b726-841af47e70c8
+
+Type:  kubernetes.io/service-account-token
+
+Data
+====
+ca.crt:     1099 bytes
+namespace:  20 bytes
+token:      eyJhbGciOiJSUzI1NiIsImtpZCI6IjFCWTBUc0FhaWU2NWxCQTlicGl6U
+
+```
+
 
 
 
