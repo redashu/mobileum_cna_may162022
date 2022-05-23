@@ -164,6 +164,34 @@ ashuapp1-569f58ddbb-nb7rq   1/1     Running   0          15m     192.168.166.140
 
 ```
 
+### creating service using expose command so that pod label will be automatically updated by service selector 
+
+```
+kubectl get  deploy
+NAME       READY   UP-TO-DATE   AVAILABLE   AGE
+ashuapp1   2/2     2            2           86s
+[ashu@client-machine ~]$ kubectl  get po 
+NAME                        READY   STATUS    RESTARTS   AGE
+ashuapp1-59bb8bb5b9-hskbx   1/1     Running   0          89s
+ashuapp1-59bb8bb5b9-w6t8g   1/1     Running   0          89s
+[ashu@client-machine ~]$ kubectl  get po  --show-labels
+NAME                        READY   STATUS    RESTARTS   AGE   LABELS
+ashuapp1-59bb8bb5b9-hskbx   1/1     Running   0          92s   app=ashuapp1,pod-template-hash=59bb8bb5b9
+ashuapp1-59bb8bb5b9-w6t8g   1/1     Running   0          92s   app=ashuapp1,pod-template-hash=59bb8bb5b9
+[ashu@client-machine ~]$ 
+[ashu@client-machine ~]$ 
+[ashu@client-machine ~]$ kubectl  get  deploy 
+NAME       READY   UP-TO-DATE   AVAILABLE   AGE
+ashuapp1   2/2     2            2           2m23s
+[ashu@client-machine ~]$ kubectl   expose deploy  ashuapp1  --type NodePort  --port 80 --name ashulb1 
+service/ashulb1 exposed
+[ashu@client-machine ~]$ kubectl get svc 
+NAME      TYPE       CLUSTER-IP       EXTERNAL-IP   PORT(S)        AGE
+ashulb1   NodePort   10.110.161.223   <none>        80:32228/TCP   4s
+[ashu@client-machine ~]$ 
+
+```
+
 
 
 
