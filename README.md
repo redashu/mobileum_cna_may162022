@@ -439,6 +439,20 @@ token:      eyJhbGciOiJSUzI1NiIsImtpZCI6IjFCWTBUc0FhaWU2NWxCQTlicGl6U
 
 ```
 
+### by default dashboard is not having privilege to access k8s etcd database 
+
+```
+kubectl create clusterrolebinding  dashboard-acess  --clusterrole=cluster-admin --serviceaccount=kubernetes-dashboard:kubernetes-dashboard
+```
+
+### Understanding Ingress controller 
+
+<img src="ingress.png">
+
+### ingress controller products 
+
+<img src="product.png">
+
 
 
 
