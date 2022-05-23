@@ -453,6 +453,125 @@ kubectl create clusterrolebinding  dashboard-acess  --clusterrole=cluster-admin 
 
 <img src="product.png">
 
+### Deploy Nginx ingress controller 
+
+[link](https://kubernetes.github.io/ingress-nginx/deploy/)
+
+```
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.2.0/deploy/static/provider/baremetal/deploy.yaml
+namespace/ingress-nginx created
+serviceaccount/ingress-nginx created
+serviceaccount/ingress-nginx-admission created
+role.rbac.authorization.k8s.io/ingress-nginx created
+role.rbac.authorization.k8s.io/ingress-nginx-admission created
+clusterrole.rbac.authorization.k8s.io/ingress-nginx created
+clusterrole.rbac.authorization.k8s.io/ingress-nginx-admission created
+rolebinding.rbac.authorization.k8s.io/ingress-nginx created
+rolebinding.rbac.authorization.k8s.io/ingress-nginx-admission created
+clusterrolebinding.rbac.authorization.k8s.io/ingress-nginx created
+clusterrolebinding.rbac.authorization.k8s.io/ingress-nginx-admission created
+configmap/ingress-nginx-controller created
+service/ingress-nginx-controller created
+service/ingress-nginx-controller-admission created
+deployment.apps/ingress-nginx-controller created
+```
+
+### deploy sample app to understand ingress 
+
+### ashutoshh app 
+
+```
+[ashu@client-machine ~]$ kubectl   create deployment  ashuhome  --image=nginx --port 80 
+deployment.apps/ashuhome created
+[ashu@client-machine ~]$ kubectl   create deployment  ashuinfo   --image=nginx --port 80 
+deployment.apps/ashuinfo created
+
+```
+### changing homepage of app 
+
+```
+ kubectl   get  po
+NAME                        READY   STATUS    RESTARTS   AGE
+ashuhome-5b467cf877-mk7tq   1/1     Running   0          79s
+ashuinfo-67fcffcc7b-lx6xv   1/1     Running   0          63s
+[ashu@client-machine ~]$ kubectl  exec -it  ashuhome-5b467cf877-mk7tq  -- bash 
+root@ashuhome-5b467cf877-mk7tq:/# 
+root@ashuhome-5b467cf877-mk7tq:/# cd /usr/share/nginx/html/
+root@ashuhome-5b467cf877-mk7tq:/usr/share/nginx/html# ls
+50x.html  index.html
+root@ashuhome-5b467cf877-mk7tq:/usr/share/nginx/html# echo "Hello this is ashutoshh home page" >index.html 
+root@ashuhome-5b467cf877-mk7tq:/usr/share/nginx/html# exit
+exit
+[ashu@client-machine ~]$ kubectl  exec -it  ashuhome-5b467cf877-lx6xv  -- bash 
+Error from server (NotFound): pods "ashuhome-5b467cf877-lx6xv" not found
+[ashu@client-machine ~]$ kubectl  exec -it  ashuinfo-67fcffcc7b-lx6xv  -- bash 
+root@ashuinfo-67fcffcc7b-lx6xv:/# cd  /usr/share/nginx/html/
+root@ashuinfo-67fcffcc7b-lx6xv:/usr/share/nginx/html# echo "THis is info page" >index.html 
+root@ashuinfo-67fcffcc7b-lx6xv:/usr/share/nginx/html# 
+
+```
+
+### final 
+
+```
+222  kubectl   create deployment  ashuhome  --image=nginx --port 80 
+  223  kubectl   create deployment  ashuinfo   --image=nginx --port 80 
+  224  kubectl   get  po
+  225  kubectl  exec -it  ashuhome-5b467cf877-mk7tq  -- bash 
+  226  kubectl  exec -it  ashuhome-5b467cf877-lx6xv  -- bash 
+  227  kubectl  exec -it  ashuinfo-67fcffcc7b-lx6xv  -- bash 
+  228  kubectl  get deploy 
+  229  kubectl  get  po
+  230  kubectl  expose deployment  ashuhome  --type ClusterIP --port 80  --name homelb 
+  231  kubectl  expose deployment  ashuinfo  --type ClusterIP --port 80  --name infolb 
+  232  kubectl get  deploy 
+  233  kubectl  get  svc
+  234  ls
+  235  vim  ashu-ingress-rule.yaml 
+  236  kubectl  get  svc
+  237  cat  ashu-ingress-rule.yaml 
+  238  vim ashu-ingress-rule.yaml 
+  239  history 
+[ashu@client-machine ~]$ kubectl apply -f ashu-ingress-rule.yaml 
+ingress.networking.k8s.io/ashu-ingress created
+[ashu@client-machine ~]$ kubectl  get  ingress
+NAME           CLASS   HOSTS          ADDRESS   PORTS   AGE
+ashu-ingress   nginx   www.ashu.com             80      4s
+```
+
+### ingress rule file 
+
+```
+[ashu@client-machine ~]$ cat  ashu-ingress-rule.yaml 
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ashu-ingress # name of rule 
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: nginx # className
+  rules:
+  - host: www.ashu.com # hostname 
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: homelb
+            port:
+              number: 80
+      - path: /info
+        pathType: Prefix
+        backend:
+          service:
+            name: infolb
+            port:
+              number: 80
+```
+
+
 
 
 
