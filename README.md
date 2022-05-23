@@ -572,7 +572,57 @@ spec:
 ```
 
 
+### deploy app from azure container registry 
 
+```
+[ashu@client-machine ~]$ cat  private.yaml 
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: ashud1
+  name: ashud1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ashud1
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: ashud1
+    spec:
+      imagePullSecrets: # call secret  
+      - name: ashusec1
+      containers:
+      - image: mobiashu.azurecr.io/mobi:appv001
+        name: mobi
+        ports:
+        - containerPort: 80
+        resources: {}
+status: {}
+
+```
+
+### 
+
+```
+ 253  kubectl create  secret docker-registry  ashusec1  --docker-server=mobiashu.azurecr.io --docker-username=mobiashu  --docker-password="+NsfHI5xgAM2gNYtdWIJ2mWd5VCrP++j"
+  254  history 
+[ashu@client-machine ~]$ kubectl  get  secret
+NAME       TYPE                                  DATA   AGE
+ashusec1   kubernetes.io/dockerconfigjson        1      16s
+default    kubernetes.io/service-account-token   3      3h22m
+[ashu@client-machine ~]$ vim   private.yaml 
+[ashu@client-machine ~]$ kubectl  apply -f private.yaml 
+deployment.apps/ashud1 configured
+[ashu@client-machine ~]$ kubectl  get  po 
+NAME                     READY   STATUS    RESTARTS   AGE
+ashud1-845648485-tft94   1/1     Running   0          4s
+```
 
 
 
