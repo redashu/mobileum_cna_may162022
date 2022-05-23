@@ -308,7 +308,9 @@ ashuapp1   Deployment/ashuapp1   0%/10%    3         20        3          57s
 
 ```
 
+### deployment pod creation strategy 
 
+<img src="pod1.yaml">
 
 
 
