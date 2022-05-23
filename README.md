@@ -192,6 +192,126 @@ ashulb1   NodePort   10.110.161.223   <none>        80:32228/TCP   4s
 
 ```
 
+## Autoscaling in k8s  need Monitoring solutions 
+
+### Monitoring plugin / tools for k8s
+
+<img src="mon.png">
+
+### deploy matric server for pod Monitoring 
+
+```
+kubectl apply -f https://raw.githubusercontent.com/redashu/k8s/hpa/hpa/components.yaml
+serviceaccount/metrics-server created
+clusterrole.rbac.authorization.k8s.io/system:aggregated-metrics-reader created
+clusterrole.rbac.authorization.k8s.io/system:metrics-server created
+rolebinding.rbac.authorization.k8s.io/metrics-server-auth-reader created
+clusterrolebinding.rbac.authorization.k8s.io/metrics-server:system:auth-delegator created
+clusterrolebinding.rbac.authorization.k8s.io/system:metrics-server created
+service/metrics-server created
+deployment.apps/metrics-server created
+apiservice.apiregistration.k8s.io/v1beta1.metrics.k8s.io created
+[ashu@client-machine ~]$ 
+[ashu@client-machine ~]$ kubectl   get  po -n kube-system 
+NAME                                       READY   STATUS    RESTARTS   AGE
+calico-kube-controllers-56cdb7c587-gt7dh   1/1     Running   0          134m
+calico-node-44lpz                          1/1     Running   0          134m
+calico-node-9vtdj                          1/1     Running   0          134m
+calico-node-fhfz8                          1/1     Running   0          134m
+coredns-6d4b75cb6d-fs7hz                   1/1     Running   0          136m
+coredns-6d4b75cb6d-xmwlp                   1/1     Running   0          136m
+etcd-control-plane                         1/1     Running   0          136m
+kube-apiserver-control-plane               1/1     Running   0          136m
+kube-controller-manager-control-plane      1/1     Running   0          136m
+kube-proxy-28ltf                           1/1     Running   0          134m
+kube-proxy-vtz2p                           1/1     Running   0          134m
+kube-proxy-z527m                           1/1     Running   0          136m
+kube-scheduler-control-plane               1/1     Running   0          136m
+metrics-server-5b46bd8f77-29c2r            1/1     Running   0          11s
+```
+
+### github repo for mts 
+
+[docsgithub](https://github.com/kubernetes-sigs/metrics-server)
+
+
+### lets check it 
+
+```
+kubectl get no
+NAME            STATUS   ROLES           AGE    VERSION
+control-plane   Ready    control-plane   137m   v1.24.0
+node1           Ready    <none>          136m   v1.24.0
+node2           Ready    <none>          136m   v1.24.0
+[ashu@client-machine ~]$ kubectl top node  node1
+NAME    CPU(cores)   CPU%   MEMORY(bytes)   MEMORY%   
+node1   79m          3%     852Mi           10%       
+[ashu@client-machine ~]$ kubectl top node  node2
+NAME    CPU(cores)   CPU%   MEMORY(bytes)   MEMORY%   
+node2   75m          3%     829Mi           10%       
+[ashu@client-machine ~]$ kubectl top node  control-plane
+NAME            CPU(cores)   CPU%   MEMORY(bytes)   MEMORY%   
+control-plane   135m         6%     1193Mi          15%       
+[ashu@client-machine ~]$ kubectl  getpo 
+error: unknown command "getpo" for "kubectl"
+
+Did you mean this?
+	get
+[ashu@client-machine ~]$ kubectl  get po 
+NAME                        READY   STATUS    RESTARTS   AGE
+ashuapp1-794646748d-d4wg5   1/1     Running   0          37m
+ashuapp1-794646748d-zmtr6   1/1     Running   0          37m
+[ashu@client-machine ~]$ kubectl  top pod ashuapp1-794646748d-d4wg5
+NAME                        CPU(cores)   MEMORY(bytes)   
+ashuapp1-794646748d-d4wg5   0m           2Mi         
+
+```
+### HPA 
+
+<img src="hpa.png">
+
+```
+ kubectl autoscale deployment  ashuapp1  --cpu-percent 10 --min=3  --max=20 --dry-run=client -oyaml
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  creationTimestamp: null
+  name: ashuapp1
+spec:
+  maxReplicas: 20
+  minReplicas: 3
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: ashuapp1
+  targetCPUUtilizationPercentage: 10
+status:
+  currentReplicas: 0
+  desiredReplicas: 0
+[ashu@client-machine ~]$ kubectl autoscale deployment  ashuapp1  --cpu-percent 10 --min=3  --max=20 
+horizontalpodautoscaler.autoscaling/ashuapp1 autoscaled
+[ashu@client-machine ~]$ 
+[ashu@client-machine ~]$ kubectl   get  hpa
+NAME       REFERENCE             TARGETS         MINPODS   MAXPODS   REPLICAS   AGE
+ashuapp1   Deployment/ashuapp1   <unknown>/10%   3         20        0          5s
+[ashu@client-machine ~]$ kubectl  get deploy 
+NAME       READY   UP-TO-DATE   AVAILABLE   AGE
+ashuapp1   3/3     3            3           4m37s
+[ashu@client-machine ~]$ kubectl   get  po 
+NAME                        READY   STATUS    RESTARTS   AGE
+ashuapp1-78c6b4fd96-krfzl   1/1     Running   0          26s
+ashuapp1-78c6b4fd96-shfjb   1/1     Running   0          4m42s
+ashuapp1-78c6b4fd96-tnxgw   1/1     Running   0          26s
+[ashu@client-machine ~]$ kubectl   get  hpa
+NAME       REFERENCE             TARGETS   MINPODS   MAXPODS   REPLICAS   AGE
+ashuapp1   Deployment/ashuapp1   0%/10%    3         20        3          57s
+
+```
+
+
+
+
+
 
 
 
