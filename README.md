@@ -139,4 +139,28 @@ ashu-mysql-78665bbfbb-zdhsv   1/1     Running   0          25s
 2022-05-24 08:59:08+00:00 [Note] [Entrypoint]: Switching to dedicated user 'mysql'
 2022-05-24 08:59:08+00:00 [Note] [Entrypoint]: En
 ```
+### Deploy Svc EP 
+
+```
+ kubectl  get  deploy 
+NAME         READY   UP-TO-DATE   AVAILABLE   AGE
+ashu-mysql   1/1     1            1           5m26s
+[ashu@client-machine ~]$ kubectl expose deploy  ashu-mysql  --type ClusterIP --port 3306  --name mysqllb1
+service/mysqllb1 exposed
+[ashu@client-machine ~]$ kubectl  get  svc
+NAME       TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)    AGE
+mysqllb1   ClusterIP   10.100.154.126   <none>        3306/TCP   4s
+[ashu@client-machine ~]$ 
+[ashu@client-machine ~]$ kubectl  get po -owide
+NAME                          READY   STATUS    RESTARTS   AGE     IP              NODE    NOMINATED NODE   READINESS GATES
+ashu-mysql-78665bbfbb-zdhsv   1/1     Running   0          6m28s   192.168.104.1   node2   <none>           <none>
+[ashu@client-machine ~]$ 
+[ashu@client-machine ~]$ kubectl  get  eip 
+error: the server doesn't have a resource type "eip"
+[ashu@client-machine ~]$ kubectl  get  ep
+NAME       ENDPOINTS            AGE
+mysqllb1   192.168.104.1:3306   33s
+
+```
+
 
