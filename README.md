@@ -276,6 +276,96 @@ logs.txt
 
 ```
 
+## Users and RBAC 
+
+<img src="rbac.png">
+
+### users in k8s 
+
+<img src="u.png">
+
+### service accounts in k8s -- for creating any resource inside k8s 
+
+```
+ kubectl  config get-contexts 
+CURRENT   NAME                          CLUSTER      AUTHINFO           NAMESPACE
+*         kubernetes-admin@kubernetes   kubernetes   kubernetes-admin   ashu-space
+[ashu@client-machine ~]$ 
+[ashu@client-machine ~]$ 
+[ashu@client-machine ~]$ 
+[ashu@client-machine ~]$ kubectl  get  sa 
+NAME      SECRETS   AGE
+default   0         29h
+[ashu@client-machine ~]$ kubectl  get  serviceaccounts 
+NAME      SECRETS   AGE
+default   0         29h
+[ashu@client-machine ~]$ kubectl  get po 
+NAME          READY   STATUS    RESTARTS   AGE
+ashudemoapp   2/2     Running   0          20m
+[ashu@client-machine ~]$ kubectl  get po  ashudemoapp -oyaml 
+apiVersion: v1
+kind: Pod
+
+```
+### kubconfig file 
+
+<img src="config.png">
+
+### testing auth 
+
+```
+kubectl  version -oyaml   --kubeconfig  /tmp/auth.conf 
+clientVersion:
+  buildDate: "2022-05-03T13:46:05Z"
+  compiler: gc
+  gitCommit: 4ce5a8954017644c5420bae81d72b09b735c21f0
+  gitTreeState: clean
+  gitVersion: v1.24.0
+  goVersion: go1.18.1
+  major: "1"
+  minor: "24"
+  platform: linux/amd64
+kustomizeVersion: v4.5.4
+serverVersion:
+  buildDate: "2022-05-03T13:38:19Z"
+  compiler: gc
+  gitCommit: 4ce5a8954017644c5420bae81d72b09b735c21f0
+  gitTreeState: clean
+  gitVersion: v1.24.0
+  goVersion: go1.18.1
+
+```
+
+####
+
+
+```
+kubectl get  ns   --kubeconfig  /tmp/auth.conf 
+Error from server (Forbidden): namespaces is forbidden: User "system:serviceaccount:limited-ns:ashu-user" cannot list resource "namespaces" in API group "" at the cluster scope
+```
+
+### RBAC 
+
+<img src="roles.png">
+
+### creating role ---
+
+```
+ 459  kubectl create role foo --verb=get,list,watch --resource=pods 
+  460  kubectl create role foo --verb=get,list,watch --resource=pods  -n limited-ns
+  461  kubectl   get  roles -n limited-ns
+  462  kubectl   get  sa  -n limited-ns
+  463  kubectl create  rolebinding -h
+  464  kubectl create  rolebinding  ashubind1  --role=foo  --serviceaccount=limited-ns:ashu-user
+  465  kubectl  get  rolebindings 
+  466  kubectl  get  rolebindings  -n limited-ns 
+  467  kubectl create  rolebinding  ashubind1  --role=foo  --serviceaccount=limited-ns:ashu-user         -n limited-ns 
+  468  kubectl  get  rolebindings  -n limited-ns 
+  469  kubectl  get  role  -n limited-ns 
+
+```
+
+
 
 
 
