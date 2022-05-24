@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: ashu-mysql
+  name: ashu-mysql # name of deployment 
+spec:
+  replicas: 1 
+  selector:
+    matchLabels:
+      app: ashu-mysql
+  strategy: {}
+  template: # will be used to create POD 
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: ashu-mysql
+    spec:
+      volumes: # creating volumes 
+      - name: ashudbvol1 
+        hostPath: # we are taking storage from Minion node 
+         path: /common/ashudb1 
+         type: DirectoryOrCreate # on the minion if directory is not present then create it
+      containers: # creating containers 
+      - image: mysql
+        name: mysql
+        ports:
+        - containerPort: 3306
+        env: # use / create ENV varibale 
+        - name: MYSQL_ROOT_PASSWORD 
+          valueFrom: # reading value from somewhere 
+           secretKeyRef: # reading password from secret 
+             name: ashumysql-cred # name of secret 
+             key: sql_pass # key of secret 
+        volumeMounts: # to mount / attach to the pod container 
+        - name: ashudbvol1  # name of volume 
+          mountPath: /var/lib/mysql/ # mount path inside container 
+        resources: {}
+
+status: {}

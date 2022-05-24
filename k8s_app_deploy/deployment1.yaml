@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: ashuapp1
+  name: ashuapp1 # name of deployment 
+spec:
+  replicas: 1 # number of pod we want initially 
+  selector:
+    matchLabels:
+      app: ashuapp1
+  strategy: {}
+  template: # deployment will be using template to create PODs 
+    metadata:
+      creationTimestamp: null
+      labels: # label of pod 
+        app: ashuapp1
+    spec:
+      containers:
+      - image: dockerashu/mobi:appv001
+        name: mobi
+        ports:
+        - containerPort: 80
+        resources: {}
+status: {}

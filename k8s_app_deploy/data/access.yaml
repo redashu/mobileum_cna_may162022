@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Secret
+type: kubernetes.io/service-account-token
+metadata:
+  name: ashu-user-sec
+  annotations:
+    kubernetes.io/service-account.name: "ashu-user"

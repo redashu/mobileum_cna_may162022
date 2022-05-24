@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: ashuspark
+  name: ashuspark
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ashuspark
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: ashuspark
+    spec:
+      containers:
+      - image: dockerashu/mobispark:v1
+        name: mobispark
+        ports:
+        - containerPort: 4040
+        tty: true
+        resources: {}
+status: {}

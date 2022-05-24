@@ -1,0 +1,7 @@
+apiVersion: v1
+data:
+  sql_pass: RG9ja2VyQDA5OSM=
+kind: Secret
+metadata:
+  creationTimestamp: null
+  name: ashumysql-cred

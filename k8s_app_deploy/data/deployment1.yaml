@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: ashuapp1
+  name: ashuapp1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ashulb2
+  strategy: {}
+  template: # pod template 
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: ashulb2
+    spec:
+      containers:
+      - image: dockerashu/mobi:appv001
+        name: mobi2
+        ports:
+        - containerPort: 80
+        resources:
+         requests: # default resoruce required by pod to start app 
+           memory: 200M 
+           cpu: 100m #  1 core cpu == 1000m milicore -- / 1 vcpu == 1000 m 
+         limits:
+           memory: 400M 
+           cpu: 200m 
+status: {}

@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: ashud1
+  name: ashud1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ashud1
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: ashud1
+    spec:
+      imagePullSecrets: # call secret  
+      - name: ashusec1
+      containers:
+      - image: mobiashu.azurecr.io/mobi:appv001
+        name: mobi
+        ports:
+        - containerPort: 80
+        resources: {}
+status: {}
