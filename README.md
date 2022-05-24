@@ -365,7 +365,92 @@ Error from server (Forbidden): namespaces is forbidden: User "system:serviceacco
 
 ```
 
+## COnfigMap -- 
 
+<img src="cm.png">
+
+```
+ 488  kubectl create configmap game-config --from-file=pod-files/config_files
+  489  kubectl  get  cm
+  490  kubectl describe cm game-config
+  491  kubectl create configmap game-config --from-file=pod-files/config_files  --dry-run=client  -o yaml 
+  492  kubectl create configmap game-config --from-file=pod-files/config_files  --dry-run=client  -o json 
+  493  history 
+  494  ls  pod-files/config_files/
+  495  kubectl create configmap game-config1 --from-file=pod-files/config_files/ui.properties
+  496  kubectl get  cm 
+  497  kubectl run podtest1  --image=alpine  --command sleep 10000 --dry-run=client -o yaml >cm.yaml 
+  498  vim cm.yaml 
+  499  hsitory
+  500  history 
+[ashu@client-machine ~]$ vim cm.yaml 
+[ashu@client-machine ~]$ vim cm.yaml 
+[ashu@client-machine ~]$ kubectl apply -f cm.yaml 
+[ashu@client-machine ~]$ kubectl apply -f cm.yaml 
+pod/podtest1 created
+[ashu@client-machine ~]$ kubectl  get po 
+NAME       READY   STATUS    RESTARTS   AGE
+podtest1   1/1     Running   0          3s
+[ashu@client-machine ~]$ kubectl  exec -it podtest1  -- sh 
+/ # cd /mnt/
+/mnt # ls
+newconfig
+/mnt # cd newconfig/
+/mnt/newconfig # ls
+game.properties  ui.properties
+/mnt/newconfig # cd  /opt/
+/opt # ls
+game.properties
+/opt # cd game.properties/
+/opt/game.properties # ls
+ui.properties
+/opt/game.properties # cat  ui.properties 
+color.good=purple
+color.bad=yellow
+allow.textmode=true
+how.nice.to.look=fairlyNice
+/opt/game.properties # 
+[ashu@client-machine ~]$ 
+
+
+```
+
+## YAML 
+
+```
+[ashu@client-machine ~]$ cat  cm.yaml 
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: podtest1
+  name: podtest1
+spec:
+  volumes:
+  - name: vol1
+    configMap:
+     name: game-config
+  - name: vol2
+    configMap:
+     name: game-config1
+  containers:
+  - command:
+    - sleep
+    - "10000"
+    image: alpine
+    name: podtest1
+    volumeMounts:
+    - name: vol1
+      mountPath: /mnt/newconfig/
+    - name: vol2
+      mountPath: /opt/game.properties
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}
+
+```
 
 
 
