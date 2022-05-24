@@ -208,6 +208,74 @@ spec:
 status: {}
 
 ```
+### MUlti container pod 
+
+<img src="mcpod.png">
+
+### pod design 
+
+<img src="pod111.png">
+
+
+### YAML 
+
+```
+[ashu@client-machine ~]$ cat multi.yaml 
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: ashudemoapp
+  name: ashudemoapp
+spec:
+  volumes: # creating volume 
+  - name: ashudatavol1 # name of volume 
+    emptyDir: {} # temp vol which take space from Minion node 
+  containers:
+  - image: nginx 
+    name: monitorc1 
+    volumeMounts:
+    - name: ashudatavol1
+      mountPath: /usr/share/nginx/html/
+      readOnly: true 
+  - image: alpine
+    name: datagenc1
+    volumeMounts: # mounting volume 
+    - name: ashudatavol1
+      mountPath: /mnt/data/
+    command: ["sh","-c","while true;do echo hello Mobi >>/mnt/data/logs.txt ; sleep 10;done"]
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}
+
+```
+
+### Deploy 
+```
+$ kubectl create  -f  multi.yaml 
+pod/ashudemoapp created
+[ashu@client-machine ~]$ kubectl  get  po 
+NAME          READY   STATUS    RESTARTS   AGE
+ashudemoapp   2/2     Running   0          5s
+[ashu@client-machine ~]$ 
+[ashu@client-machine ~]$ 
+[ashu@client-machine ~]$ kubectl  exec -it  ashudemoapp  -- bash 
+Defaulted container "monitorc1" out of: monitorc1, datagenc1
+root@ashudemoapp:/# cd  /usr/share/nginx/html/
+root@ashudemoapp:/usr/share/nginx/html# ls
+logs.txt
+root@ashudemoapp:/usr/share/nginx/html# exit
+exit
+[ashu@client-machine ~]$ kubectl  exec -it  ashudemoapp -c  datagenc1  -- sh 
+/ # cd /mnt/data/
+/mnt/data # ls
+logs.txt
+/mnt/data # exit
+
+```
+
 
 
 
