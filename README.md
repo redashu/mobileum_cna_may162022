@@ -162,5 +162,52 @@ NAME       ENDPOINTS            AGE
 mysqllb1   192.168.104.1:3306   33s
 
 ```
+## Postgres Example 
+
+```
+ cat  postgres.yaml 
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: alex-postgres
+  name: alex-postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: alex-postgres
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: alex-postgres
+    spec:
+      volumes:
+      - name: ashudbvol2 
+        nfs: # Network file system type volume 
+         server: 172.31.30.191
+         path: /common/ashu/db1 
+      containers:
+      - image: postgres
+        name: postgres
+        ports:
+        - containerPort: 5432
+        env:
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: ashu-cred
+              key: sql_pass
+        volumeMounts:
+        - name: ashudbvol2
+          mountPath: /var/lib/postgresql/data 
+        resources: {}
+status: {}
+
+```
+
 
 
